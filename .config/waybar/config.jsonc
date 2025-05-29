@@ -1,0 +1,158 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 46,
+    "spacing": 4,
+    "modules-left": [
+        "hyprland/workspaces",
+        "memory",
+        "cpu"
+    ],
+    "modules-center": [
+        "clock"
+    ],
+    "modules-right": [
+        "tray",
+        "network",
+        "bluetooth",
+        "pulseaudio",
+        "backlight",
+        "battery",
+        "custom/power-menu"
+    ],
+    "hyprland/workspaces": {
+        "disable-scroll": false,
+        "all-outputs": true,
+        "format": "{icon}",
+        "on-click": "activate",
+        "persistent-workspaces": {
+            "*": 5
+        },
+        "format-icons": {
+            "1": "󰎤",
+            "2": "󰎧",
+            "3": "󰎪",
+            "4": "󰎭",
+            "5": "󰎱",
+            "urgent": "󰃃",
+            "focused": "󰎡",
+            "default": "󰎡"
+        },
+        "active-only": false,
+        "sort-by-number": true,
+        "format-active": "<span color='#FFFFFF'>{icon}</span>",
+        "format-inactive": "<span color='#808080'>{icon}</span>"
+    },
+    "custom/power-menu": {
+        "format": "󰐥",
+        "on-click": "wlogout",
+        "tooltip": true,
+        "tooltip-format": "电源菜单"
+    },
+    "network": {
+        "format-wifi": "{icon}",
+        "format-ethernet": "󰈀",
+        "tooltip-format": "{essid}\n↑ {bandwidthUpBytes} ↓ {bandwidthDownBytes}",
+        "format-linked": "󱘖",
+        "format-disconnected": "󰤭",
+        "format-alt": "{icon}",
+        "format-icons": {
+            "wifi": [
+                "󰤯",
+                "󰤟",
+                "󰤢",
+                "󰤥",
+                "󰤨"
+            ],
+            "ethernet": "󰈀",
+            "linked": "󱘖",
+            "disconnected": "󰤭"
+        },
+        "interval": 1,
+        "on-click": "nm-connection-editor",
+        "on-click-right": "nm-connection-editor"
+    },
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "interval": 1,
+        "format-icons": [
+            "󰁺",
+            "󰁻",
+            "󰁼",
+            "󰁽",
+            "󰁾",
+            "󰁿",
+            "󰂀",
+            "󰂁",
+            "󰂂",
+            "󰁹"
+        ],
+        "tooltip": true,
+        "tooltip-format": "{capacity}% ({time})"
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume:>3}%",
+        "format-muted": "󰖁   0%",
+        "format-icons": {
+            "headphone": "󰋋",
+            "hands-free": "󰋋",
+            "headset": "󰋋",
+            "phone": "󰏲",
+            "portable": "󰏲",
+            "car": "󰋋",
+            "default": [
+                "󰕿",
+                "󰖀",
+                "󰕾"
+            ]
+        },
+        "on-click-right": "pavucontrol -t 3",
+        "on-click": "pactl -- set-sink-mute 0 toggle"
+    },
+    "memory": {
+        "format": "󰍛 {used:0.1f}G/{total:0.1f}G",
+    },
+    "cpu": {
+        "format": "󰻠 {usage}%",
+        "tooltip": true,
+        "tooltip-format": "CPU 使用率: {usage}%"
+    },
+    "clock": {
+        "interval": 1,
+        "timezone": "Europe/Berlin",
+        "format": "󱑎 {:%H:%M}",
+        "tooltip": true,
+        "tooltip-format": "󱑎 {:L%Y 年 %m 月 %d 日, %A}"
+    },
+    "tray": {
+        "icon-size": 17,
+        "spacing": 6
+    },
+    "backlight": {
+        "device": "intel_backlight",
+        "format": "{icon} {percent}%",
+        "format-icons": [
+            "󰃞",
+            "󰃟",
+            "󰃠",
+            "󰃡"
+        ]
+    },
+    "bluetooth": {
+        "format": "󰂯",
+        "format-disabled": "󰂲",
+        "format-connected": "󰂯",
+        "format-connected-battery": "󰂯 {device_battery_percentage}%",
+        "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+        "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+        "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
+        "on-click": "blueman-manager",
+        "on-click-right": "blueman-manager"
+    }
+}
