@@ -1,0 +1,216 @@
+@define-color foreground #eeeeee;
+@define-color foreground-inactive #aaaaaa;
+@define-color background #1a1a1a;
+@define-color background-alt #2a2a2a;
+@define-color background-hover #3a3a3a;
+@define-color accent #4a4a4a;
+
+* {
+    font-family: JetBrainsMono Nerd Font;
+    font-size: 16px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 8px;
+    min-height: 0;
+}
+
+#waybar {
+    background: transparent;
+    color: @foreground;
+}
+
+/* Module groups */
+.modules-left,
+.modules-center,
+.modules-right {
+    background-color: @background;
+    padding: 0 4px;
+    margin: 4px;
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Individual modules */
+#workspaces,
+#memory,
+#cpu,
+#clock,
+#tray,
+#network,
+#bluetooth,
+#pulseaudio,
+#backlight,
+#battery,
+#custom-power-menu {
+    padding: 0 0.5em;
+    margin: 4px 2px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover effects */
+#workspaces:hover,
+#memory:hover,
+#cpu:hover,
+#clock:hover,
+#tray:hover,
+#network:hover,
+#bluetooth:hover,
+#pulseaudio:hover,
+#backlight:hover,
+#battery:hover,
+#custom-power-menu:hover {
+    background-color: @background-hover;
+    box-shadow: inset 0 -2px @accent;
+}
+
+/* Workspaces specific */
+#workspaces button {
+    color: @foreground;
+    padding: 0 0.4em;
+    margin: 4px 2px;
+    border-radius: 4px;
+    min-width: 1.4em;
+}
+
+#workspaces button:hover {
+    background-color: @background-hover;
+    box-shadow: inset 0 -2px @accent;
+}
+
+#workspaces button.empty {
+    color: @foreground-inactive;
+}
+
+#workspaces button.active {
+    color: @foreground;
+    background-color: @background-hover;
+    box-shadow: inset 0 -2px @accent;
+}
+
+/* System Controls Group */
+#custom-lock,
+#custom-reboot,
+#custom-power {
+    padding: 0 0.5em;
+    margin: 4px 2px;
+    background-color: @background-alt;
+    border-radius: 4px;
+}
+
+#custom-lock:hover,
+#custom-reboot:hover,
+#custom-power:hover {
+    background-color: @background-hover;
+    box-shadow: inset 0 -2px @accent;
+}
+
+/* System Info Group */
+#memory:hover,
+#cpu:hover {
+    background-color: @background-hover;
+    box-shadow: inset 0 -2px @accent;
+}
+
+/* Right Side Modules */
+#tray:hover,
+#network:hover,
+#bluetooth:hover,
+#pulseaudio:hover,
+#backlight:hover,
+#battery:hover,
+#custom-power-menu:hover {
+    background-color: @background-hover;
+    box-shadow: inset 0 -2px @accent;
+}
+
+/* Center Clock */
+#clock:hover {
+    background-color: @background-hover;
+    box-shadow: inset 0 -2px @accent;
+}
+
+/* Module States */
+#battery.warning {
+    color: @foreground;
+    background-color: @background-hover;
+    box-shadow: inset 0 -2px @accent;
+}
+
+#battery.critical {
+    color: @foreground;
+    background-color: @background-hover;
+    box-shadow: inset 0 -2px @accent;
+}
+
+#network.disconnected {
+    color: @foreground-inactive;
+}
+
+#pulseaudio.muted {
+    color: @foreground-inactive;
+}
+
+/* Tooltips */
+tooltip {
+    background-color: @background;
+    color: @foreground;
+    border: 2px solid @accent;
+    border-radius: 8px;
+    padding: 8px;
+    margin: 4px;
+}
+
+tooltip label {
+    font-family: JetBrainsMono Nerd Font;
+    font-size: 14px;
+    padding: 4px;
+}
+
+/* Tray specific */
+#tray {
+    padding: 0 8px;
+}
+
+/* Network specific */
+#network {
+    padding: 0 0.5em;
+    margin: 4px 2px;
+    min-width: 1.4em;
+}
+
+#network:hover {
+    background-color: @background-hover;
+    box-shadow: inset 0 -2px @accent;
+}
+
+#network.disconnected {
+    color: @foreground-inactive;
+}
+
+/* Calendar specific */
+#custom-calendar {
+    padding: 0 0.5em;
+    margin: 4px 2px;
+    font-family: monospace;
+    font-size: 14px;
+    min-width: 200px;
+}
+
+#custom-calendar.calendar {
+    background-color: @background-alt;
+    padding: 8px;
+    margin: 4px;
+    border-radius: 8px;
+}
+
+#power-profiles-daemon {
+    padding: 0 0.5em;
+    margin: 4px 2px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#power-profiles-daemon:hover {
+    background-color: @background-hover;
+    box-shadow: inset 0 -2px @accent;
+}

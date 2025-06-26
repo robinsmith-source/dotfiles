@@ -18,6 +18,7 @@
         "pulseaudio",
         "backlight",
         "battery",
+        "power-profiles-daemon",
         "custom/power-menu"
     ],
     "hyprland/workspaces": {
@@ -93,7 +94,7 @@
             "󰁹"
         ],
         "tooltip": true,
-        "tooltip-format": "{capacity}% ({time})"
+        "tooltip-format": "{capacity}% ({time})",
     },
     "pulseaudio": {
         "format": "{icon} {volume:>3}%",
@@ -125,9 +126,9 @@
     "clock": {
         "interval": 1,
         "timezone": "Europe/Berlin",
-        "format": "󱑎 {:%H:%M}",
+        "format": "{:%a, %d %b, %I:%M %p}",
         "tooltip": true,
-        "tooltip-format": "󱑎 {:L%Y 年 %m 月 %d 日, %A}"
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
     },
     "tray": {
         "icon-size": 17,
@@ -154,5 +155,16 @@
         "tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
         "on-click": "blueman-manager",
         "on-click-right": "blueman-manager"
+    },
+    "power-profiles-daemon": {
+        "format": "{icon}",
+        "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
+        "tooltip": true,
+        "format-icons": {
+            "default": "",
+            "performance": "",
+            "balanced": "",
+            "power-saver": ""
+        }
     }
 }
