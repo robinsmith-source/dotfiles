@@ -70,7 +70,7 @@ ZSH_THEME="lambda"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git ssh ssh-agent)
+plugins=(git ssh ssh-agent terraform)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -112,3 +112,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # define dotfiles alias
 alias dotfiles='/usr/bin/git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME"'
+
+eval "$(zoxide init zsh)"
+source <$(fzf --zsh)
