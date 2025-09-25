@@ -114,4 +114,4 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 alias dotfiles='/usr/bin/git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME"'
 
 eval "$(zoxide init zsh)"
-source <$(fzf --zsh)
+source <(fzf --zsh)
