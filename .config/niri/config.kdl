@@ -10,3 +10,4 @@ include "./cfg/misc.kdl"
 
 include "./noctalia.kdl"
 
+include "./animations/smoke.kdl"

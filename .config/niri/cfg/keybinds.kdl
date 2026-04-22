@@ -11,12 +11,16 @@ binds {
     // ─── Applications ───
     Mod+Return                          hotkey-overlay-title="Open Terminal: Alacritty" { spawn "alacritty"; }
     Mod+CTRL+Return                     hotkey-overlay-title="Open App Launcher: noctalia launcher" { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
-    Mod+B                               hotkey-overlay-title="Open Browser: google-chrome-stable" { spawn "google-chrome-stable"; }
+    Mod+B                               hotkey-overlay-title="Open Browser: zen-browser" { spawn "zen-browser"; }
     Mod+ALT+L                           hotkey-overlay-title="Lock Screen: noctalia lock" { spawn-sh "qs -c noctalia-shell ipc call lockScreen lock"; }
     Mod+Shift+Q                        hotkey-overlay-title="Session Menu: noctalia sessionMenu" { spawn-sh "qs -c noctalia-shell ipc call sessionMenu toggle"; }
 
     // Please choose your own file manager.
     Mod+E                               hotkey-overlay-title="File Manager: Nautilus" { spawn "nautilus"; }
+    Mod+P                               hotkey-overlay-title="Performance Monitor: BTOP" { spawn "alacritty" "-e" "btop"; }
+    Mod+V                               hotkey-overlay-title="Code Editor: VsCode" { spawn "code"; }
+    Mod+N                               hotkey-overlay-title="Code Editor: Neovim" { spawn "neovim"; }
+    Mod+Z                             hotkey-overlay-title="Code Editor: Zed" { spawn "zed"; }
 
     // ─── Media Controls ───
     XF86AudioRaiseVolume                allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume increase"; }

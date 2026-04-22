@@ -1,0 +1,127 @@
+// CRT Power Cycle
+// Open: the window powers on from a bright horizontal line at center (vertical
+//       deflection ramps up), then expands to full height with a phosphor warm-up
+//       tint, CRT barrel distortion, scanlines, and vignette.
+// Close: image squishes toward a bright center line (vertical deflection lost),
+//        then the line fades to black — classic CRT power-off.
+//
+// Adjustable:
+// - barrel (0.12):     screen curvature strength (higher = more fish-eye)
+// - scanline (0.78):   dark-row brightness (lower = more visible scanlines)
+// - warmup_tint:       phosphor color at power-on (currently green-amber)
+
+animations {
+    window-open {
+        duration-ms 620
+        curve "ease-out-quad"
+        custom-shader r"
+            vec4 open_color(vec3 coords_geo, vec3 size_geo) {
+                float p0 = niri_clamped_progress;
+                float p  = p0 * p0 * (3.0 - 2.0 * p0);
+
+                vec2 uv = coords_geo.xy;
+                if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+                    return vec4(0.0);
+
+                // ── Barrel distortion (CRT curved glass) ─────────────────────
+                vec2 c = uv - 0.5;
+                float r2 = dot(c, c);
+                c *= 1.0 + r2 * 0.12;
+                vec2 b = c + 0.5;   // barrel-distorted UV
+
+                // ── Vertical expansion from center ────────────────────────────
+                // At p=0 the window is a thin line; at p=1 it fills the screen.
+                float expand = max(0.002, p);
+                float orig_y = (b.y - 0.5) / expand + 0.5;
+
+                if (orig_y < 0.0 || orig_y > 1.0) {
+                    // Outside the expanding region — show phosphor glow halo
+                    float dist = abs(b.y - 0.5);
+                    float halo_w = max(0.006, expand * 0.1);
+                    float halo   = exp(-dist / halo_w) * (1.0 - p0);
+                    return vec4(0.75, 1.0, 0.55, halo);
+                }
+
+                // ── Sample texture ────────────────────────────────────────────
+                vec3 tc    = niri_geo_to_tex * vec3(b.x, orig_y, 1.0);
+                vec4 color = texture2D(niri_tex, tc.st);
+
+                // ── Scanlines ─────────────────────────────────────────────────
+                float scan = mod(floor(orig_y * size_geo.y), 2.0);
+                color.rgb *= (scan < 0.5) ? 0.78 : 1.0;
+
+                // ── Vignette (curved glass darkens corners) ───────────────────
+                color.rgb *= max(0.0, 1.0 - r2 * 2.8);
+
+                // ── Phosphor warm-up tint (green→neutral as it settles) ───────
+                float warmup = max(0.0, 1.0 - p0 * 2.2);
+                color.rgb = mix(color.rgb, color.rgb * vec3(0.55, 1.2, 0.45), warmup * 0.55);
+
+                // ── Phosphor streak at the expanding scan edges ───────────────
+                float edge_d = min(abs(orig_y), abs(orig_y - 1.0));
+                float streak = exp(-edge_d * 18.0) * (1.0 - p0) * 0.8;
+                color.rgb   += vec3(0.55, 1.0, 0.4) * streak;
+
+                color.a *= p;
+                return color;
+            }
+        "
+    }
+
+    window-close {
+        duration-ms 420
+        curve "ease-out-quad"
+        custom-shader r"
+            vec4 close_color(vec3 coords_geo, vec3 size_geo) {
+                float p0 = niri_clamped_progress;
+                float p  = p0 * p0 * (3.0 - 2.0 * p0);
+
+                vec2 uv = coords_geo.xy;
+                if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+                    return vec4(0.0);
+
+                // ── Barrel distortion ─────────────────────────────────────────
+                vec2 c = uv - 0.5;
+                float r2 = dot(c, c);
+                c *= 1.0 + r2 * 0.12;
+                vec2 b = c + 0.5;
+
+                // ── Phase split ───────────────────────────────────────────────
+                // 0.0 – 0.68 : image squishes toward center line
+                // 0.68 – 1.0 : bright line fades to black
+                float squish = min(p / 0.68, 1.0);
+                float fade   = max(0.0, (p - 0.68) / 0.32);
+
+                float vis = max(0.003, 1.0 - squish);
+                float orig_y = (b.y - 0.5) / vis + 0.5;
+
+                if (orig_y < 0.0 || orig_y > 1.0) {
+                    // Bright center line and halo
+                    float dist   = abs(b.y - 0.5);
+                    float halo_w = max(0.005, vis * 0.12);
+                    float halo   = exp(-dist / halo_w);
+                    return vec4(0.9, 1.0, 0.75, halo * (1.0 - fade));
+                }
+
+                // ── Sample texture ────────────────────────────────────────────
+                vec3 tc    = niri_geo_to_tex * vec3(b.x, orig_y, 1.0);
+                vec4 color = texture2D(niri_tex, tc.st);
+
+                // ── Scanlines (pop out more as image squishes) ────────────────
+                float scan = mod(floor(orig_y * size_geo.y), 2.0);
+                color.rgb *= (scan < 0.5) ? 0.78 : 1.0;
+
+                // ── Vignette ──────────────────────────────────────────────────
+                color.rgb *= max(0.0, 1.0 - r2 * 2.8);
+
+                // ── Phosphor streak at collapsing scan edges ──────────────────
+                float edge_d = min(abs(orig_y), abs(orig_y - 1.0));
+                float streak = exp(-edge_d * 18.0) * squish * 0.7;
+                color.rgb   += vec3(0.55, 1.0, 0.4) * streak;
+
+                color.a *= (1.0 - fade);
+                return color;
+            }
+        "
+    }
+}

@@ -4,9 +4,9 @@
 input {
     keyboard {
         xkb {
-		      layout "us,de" // Use the American keyboard layout
-          variant "intl"
-          options "compose:caps,grp:alts_toggle"
+          layout "de,us" // Use the American keyboard layout
+          variant ",intl"
+          options "grp:win_space_toggle, ctrl:nocaps"
         }
         numlock // Enable numlock on startup
     }

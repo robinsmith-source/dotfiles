@@ -6,7 +6,7 @@ WINIT_X11_SCALE_FACTOR = "1"
 dynamic_padding = true
 decorations = "full"
 title = "Alacritty@CachyOS"
-opacity = 0.9
+opacity = 1
 padding = { x = 6, y = 6 }
 decorations_theme_variant = "Dark"
 
@@ -139,3 +139,8 @@ action = "ResetFontSize"
 [general]
 import = ["~/.config/alacritty/themes/noctalia.toml"]
 live_config_reload = true
+
+[[keyboard.bindings]]
+key = "Return"
+mods = "Shift"
+chars = "\u001B\r"

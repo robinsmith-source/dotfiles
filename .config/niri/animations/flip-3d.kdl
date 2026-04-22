@@ -1,0 +1,160 @@
+// 3D Perspective Flip
+// Window opens with a Y-axis card-flip from edge-on to face-on.
+// Window closes by folding back to edge-on.
+//
+// Uses a real perspective projection inverse: for each screen pixel the shader
+// solves for the original texture coordinate on the rotated surface.
+//
+// Visual effects:
+//  - Perspective-correct texture mapping (far side compresses, near side expands)
+//  - Lambert diffuse shading (surface darkens as it turns edge-on)
+//  - Neon blue rim glow at the leading/trailing edge
+//  - Specular sheen sweep across the surface during rotation
+//
+// Adjustable:
+//  - D (1.5 * width): virtual camera-to-window distance — lower = stronger perspective
+//  - rim glow color: vec3(0.35, 0.65, 1.0) = cool blue
+
+animations {
+    window-open {
+        duration-ms 480
+        curve "ease-out-expo"
+        custom-shader r"
+            vec4 open_color(vec3 coords_geo, vec3 size_geo) {
+                float p0 = niri_clamped_progress;
+                // Extra smoothstep on top of curve for snappier feel
+                float p  = p0 * p0 * (3.0 - 2.0 * p0);
+
+                vec2 uv = coords_geo.xy;
+                if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+                    return vec4(0.0);
+
+                // Work in pixel space (same convention as fold-window.kdl)
+                vec2 size   = size_geo.xy;
+                vec2 center = size * 0.5;
+                vec2 px     = uv * size;               // pixel position
+                vec2 sc     = px - center;             // centered pixel
+
+                // Y-axis rotation: PI/2 (edge-on) -> 0 (face-on) as p -> 1
+                float angle = (1.0 - p) * 1.5707963;
+                float cos_a = cos(angle);
+                float sin_a = sin(angle);
+
+                // Virtual camera distance (in pixels). Larger = flatter perspective.
+                float D = size.x * 1.5;
+
+                // ── Inverse perspective Y-axis rotation ───────────────────────
+                // Forward: sc_x = ox * cos_a * D / (D + ox * sin_a)
+                //          sc_y = oy * D       / (D + ox * sin_a)
+                // Right side rotates behind screen (z = ox * sin_a, positive = far).
+                //
+                // Inverse for ox:
+                float denom = cos_a * D - sc.x * sin_a;
+                if (abs(denom) < 0.5) return vec4(0.0);
+
+                float ox = sc.x * D / denom;           // original X (centered)
+
+                // Cull pixels that land outside the window face
+                if (ox < -center.x || ox > center.x) return vec4(0.0);
+
+                // Perspective scale at this X (used to recover original Y)
+                float z  = ox * sin_a;                 // depth offset
+                float ps = D / (D + z);                // perspective scale
+                float oy = sc.y / ps;                  // original Y (centered)
+
+                if (oy < -center.y || oy > center.y) return vec4(0.0);
+
+                // Back to [0, 1] UVs
+                vec2 orig_uv  = (vec2(ox, oy) + center) / size;
+                vec3 tc       = niri_geo_to_tex * vec3(orig_uv, 1.0);
+                vec4 color    = texture2D(niri_tex, tc.st);
+
+                // ── Lighting ──────────────────────────────────────────────────
+                // Lambert: surface fully lit when face-on (cos_a = 1)
+                float diffuse = mix(0.05, 1.0, cos_a);
+                color.rgb *= diffuse;
+
+                // Specular sheen: a bright band that sweeps from right to left
+                // as the surface rotates into view (position tied to angle)
+                float sheen_x  = (1.0 - p) * size.x * 0.5;   // sweeps left->right
+                float sheen_w  = size.x * 0.18;               // band width
+                float sheen_d  = abs(ox - (sheen_x - center.x));
+                float sheen    = exp(-sheen_d * sheen_d / (2.0 * sheen_w * sheen_w));
+                sheen *= sin_a * (1.0 - p0);                  // fades as it settles
+                color.rgb += vec3(0.8, 0.9, 1.0) * sheen * 0.5;
+
+                // Neon rim glow: blue halo on the thin leading edge
+                float rim = pow(sin_a, 4.0) * (1.0 - p0);
+                color.rgb += vec3(0.3, 0.6, 1.0) * rim * 1.5;
+
+                // Alpha: instant appearance (window snaps on as it crosses edge-on)
+                color.a *= smoothstep(0.0, 0.06, p);
+
+                return color;
+            }
+        "
+    }
+
+    window-close {
+        duration-ms 360
+        curve "ease-out-quad"
+        custom-shader r"
+            vec4 close_color(vec3 coords_geo, vec3 size_geo) {
+                float p0 = niri_clamped_progress;
+                float p  = p0 * p0 * (3.0 - 2.0 * p0);
+
+                vec2 uv = coords_geo.xy;
+                if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0)
+                    return vec4(0.0);
+
+                vec2 size   = size_geo.xy;
+                vec2 center = size * 0.5;
+                vec2 px     = uv * size;
+                vec2 sc     = px - center;
+
+                // Y-axis rotation: 0 (face-on) -> PI/2 (edge-on) as p -> 1
+                float angle = p * 1.5707963;
+                float cos_a = cos(angle);
+                float sin_a = sin(angle);
+
+                float D = size.x * 1.5;
+
+                float denom = cos_a * D - sc.x * sin_a;
+                if (abs(denom) < 0.5) return vec4(0.0);
+
+                float ox = sc.x * D / denom;
+                if (ox < -center.x || ox > center.x) return vec4(0.0);
+
+                float z  = ox * sin_a;
+                float ps = D / (D + z);
+                float oy = sc.y / ps;
+                if (oy < -center.y || oy > center.y) return vec4(0.0);
+
+                vec2 orig_uv = (vec2(ox, oy) + center) / size;
+                vec3 tc      = niri_geo_to_tex * vec3(orig_uv, 1.0);
+                vec4 color   = texture2D(niri_tex, tc.st);
+
+                // Lambert shading
+                float diffuse = mix(0.05, 1.0, cos_a);
+                color.rgb *= diffuse;
+
+                // Specular sheen sweeps as window folds away
+                float sheen_x = p * size.x * 0.5;
+                float sheen_w = size.x * 0.18;
+                float sheen_d = abs(ox - (sheen_x - center.x));
+                float sheen   = exp(-sheen_d * sheen_d / (2.0 * sheen_w * sheen_w));
+                sheen *= sin_a * p0;
+                color.rgb += vec3(0.8, 0.9, 1.0) * sheen * 0.5;
+
+                // Neon rim glow at the receding edge
+                float rim = pow(sin_a, 4.0) * p0;
+                color.rgb += vec3(0.3, 0.6, 1.0) * rim * 1.5;
+
+                // Alpha snaps off as window becomes edge-on
+                color.a *= smoothstep(1.0, 0.94, p);
+
+                return color;
+            }
+        "
+    }
+}
