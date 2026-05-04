@@ -10,6 +10,7 @@
 !.github/**
 !.config/
 !.config/**
+!README.md
 
 # Claude Code local settings (machine-specific)
 .claude/
