@@ -31,7 +31,7 @@ output "DP-2" {
   scale 1
 }
 
-/- output "HDMI-A-1" {
+output "HDMI-A-1" {
   mode "2560x1440@60"
   scale 1
 }

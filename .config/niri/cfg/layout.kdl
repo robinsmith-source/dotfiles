@@ -24,4 +24,33 @@ window-rule {
     match app-id="discord" 
     match app-id="obsidian" 
     open-maximized true
+
+    background-effect {
+      blur true
+    }
+}
+
+// Enable blur behind the Alacritty terminal.
+window-rule {
+    match app-id="^Alacritty$"
+
+    background-effect {
+        blur true
+    }
+}
+
+// Enable blur behind the fuzzel launcher.
+layer-rule {
+    match namespace="^launcher$"
+
+    background-effect {
+        blur true
+    }
+}
+
+blur {
+    passes 5
+    offset 3
+    noise 0.2
+    saturation 1.5
 }

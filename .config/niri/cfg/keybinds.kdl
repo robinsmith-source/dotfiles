@@ -72,6 +72,12 @@ binds {
     Mod+Shift+CTRL+UP                   { move-column-to-monitor-up; }
     Mod+Shift+CTRL+Down                 { move-column-to-monitor-down; }
 
+    Mod+Shift+CTRL+H                 { move-column-to-monitor-left; }
+    Mod+Shift+CTRL+L                { move-column-to-monitor-right; }
+    Mod+Shift+CTRL+K                   { move-column-to-monitor-up; }
+    Mod+Shift+CTRL+J                 { move-column-to-monitor-down; }
+
+    Mod+Ctrl+E repeat=false { spawn-sh "wl-mirror $(niri msg -j focused-output | jq -r .name)"; }
     // ─── Workspace Switching ───
     Mod+WheelScrollDown                 cooldown-ms=150 { focus-workspace-down; }
     Mod+WheelScrollUp                   cooldown-ms=150 { focus-workspace-up; }

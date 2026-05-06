@@ -163,7 +163,8 @@
             "right": [
                 {
                     "blacklist": [
-                        "nm-applet"
+                        "nm-applet",
+                        "Shelly"
                     ],
                     "chevronColor": "primary",
                     "colorizeIcons": false,
@@ -253,6 +254,9 @@
                         "videoSource": "portal"
                     },
                     "id": "plugin:screen-recorder"
+                },
+                {
+                    "id": "plugin:mirror-mirror"
                 }
             ]
         }
@@ -390,6 +394,18 @@
                         "statType": "CPU",
                         "x": 40,
                         "y": 280
+                    },
+                    {
+                        "clockColor": "none",
+                        "clockStyle": "minimal",
+                        "customFont": "",
+                        "format": "HH:mm\\nd MMMM yyyy",
+                        "id": "Clock",
+                        "roundedCorners": true,
+                        "showBackground": true,
+                        "useCustomFont": false,
+                        "x": 50,
+                        "y": 50
                     }
                 ]
             },
@@ -790,12 +806,12 @@
         "enableUserTheming": true
     },
     "ui": {
-        "boxBorderEnabled": false,
+        "boxBorderEnabled": true,
         "fontDefault": "JetBrainsMono NF",
         "fontDefaultScale": 1,
         "fontFixed": "JetBrainsMono NF",
         "fontFixedScale": 1,
-        "panelBackgroundOpacity": 1,
+        "panelBackgroundOpacity": 0.93,
         "panelsAttachedToBar": true,
         "scrollbarAlwaysVisible": true,
         "settingsPanelMode": "window",

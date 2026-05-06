@@ -7,12 +7,16 @@
         }
     ],
     "states": {
-        "color-scheme-creator": {
+        "github-feed": {
             "enabled": true,
             "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
         },
-        "github-feed": {
+        "mirror-mirror": {
             "enabled": true,
+            "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
+        },
+        "netbird": {
+            "enabled": false,
             "sourceUrl": "https://github.com/noctalia-dev/noctalia-plugins"
         },
         "niri-animation-picker": {
