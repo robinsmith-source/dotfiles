@@ -1,0 +1,29 @@
+name: validate
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: "."
+      - run: |
+          find . \( -name '*.json' -o -name '*.jsonc' \) ! -path './.git/*' ! -path './.claude/*' | xargs -I{} node -e "
+          const s = require('fs').readFileSync(process.argv[1],'utf8')
+            .replace(/\"(?:[^\"\\\\]|\\\\.)*\"|\/\/[^\n]*|\/\*[\s\S]*?\*\//g, m => m.startsWith('\"') ? m : '')
+            .replace(/,(\s*[}\]])/g, '\$1');
+          JSON.parse(s);" {}
+      - run: sudo apt-get install -y --no-install-recommends lua-check
+      - run: luacheck .config/nvim --globals vim --no-max-line-length --exclude-files .config/nvim/lua/plugins/example.lua
+
+  arch:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: pacman -Syu --noconfirm niri fish
+      - run: mkdir -p ~/.config && cp -r .config/niri ~/.config/niri && niri validate
+      - run: find .config/fish -name '*.fish' | xargs -I{} fish --no-execute {}
