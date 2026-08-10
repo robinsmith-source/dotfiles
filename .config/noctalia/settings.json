@@ -208,7 +208,7 @@
                     "textColor": "none"
                 },
                 {
-                    "displayMode": "onhover",
+                    "displayMode": "graphic",
                     "iconColor": "none",
                     "id": "Bluetooth",
                     "textColor": "none"
@@ -256,6 +256,8 @@
                     "id": "plugin:screen-recorder"
                 },
                 {
+                    "defaultSettings": {
+                    },
                     "id": "plugin:mirror-mirror"
                 }
             ]
@@ -290,10 +292,10 @@
         "manualSunrise": "06:30",
         "manualSunset": "18:30",
         "monitorForColors": "",
-        "predefinedScheme": "Ayu",
+        "predefinedScheme": "Oxocarbon",
         "schedulingMode": "off",
         "syncGsettings": true,
-        "useWallpaperColors": true
+        "useWallpaperColors": false
     },
     "controlCenter": {
         "cards": [
@@ -865,7 +867,7 @@
         "wallhavenCategories": "100",
         "wallhavenOrder": "desc",
         "wallhavenPurity": "100",
-        "wallhavenQuery": "",
+        "wallhavenQuery": "blue ",
         "wallhavenRatios": "",
         "wallhavenResolutionHeight": "1800",
         "wallhavenResolutionMode": "atleast",

@@ -3,13 +3,26 @@
         clip-to-geometry true
     }
 
-    layer-rule {
-        match namespace="^noctalia-wallpaper*"
-        place-within-backdrop true
+    window-rule {
+        background-effect {
+          blur true
+          xray false
+        }
     }
 
-    overview {
-      workspace-shadow {
-        off
-      }
+    // Floating Noctalia settings window.
+    window-rule {
+        match app-id="dev.noctalia.Noctalia"
+        open-floating true
+        default-column-width { fixed 1080; }
+        default-window-height { fixed 920; }
     }
+
+    layer-rule {
+      match namespace="^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$"
+        background-effect {
+          xray false
+          // blur false
+        }
+    }
+
