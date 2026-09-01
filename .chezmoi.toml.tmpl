@@ -1,0 +1,10 @@
+[git]
+    autoCommit = true
+    commitMessageTemplate = "{{ "{{" }} promptString `Commit message` {{ "}}" }}"
+[edit]
+    command = "zeditor"
+[diff]
+    command = "zeditor"
+    args = ["--diff", "{{ "{{" }} .Destination {{ "}}" }}", "{{ "{{" }} .Target {{ "}}" }}"]
+[bitwarden]
+    unlock = "auto"

@@ -64,6 +64,7 @@ PACMAN_PKGS=(
     curl
     wget
     less
+    chezmoi
 
     # ─── desktop: niri + noctalia ───
     # cachyos-niri-noctalia pulls in niri, noctalia, capitaine-cursors, wl-clipboard,

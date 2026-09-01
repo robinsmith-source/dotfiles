@@ -33,19 +33,34 @@ git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si
 
 ### 2. Clone the dotfiles
 
-```bash
-git clone --bare git@github.com:robinsmith-source/dotfiles.git "$HOME/.dotfiles"
-alias dots='git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME"'
-dots checkout
-dots config status.showUntrackedFiles no
-```
-
-If checkout fails due to conflicting files, back them up first:
+On a fresh machine with no chezmoi installed yet, this installs it and runs init + apply
+in one line:
 
 ```bash
-dots checkout 2>&1 | grep '^\s' | awk '{print $1}' | xargs -I{} mv {} {}.bak
-dots checkout
+sh -c "$(curl -fsLS https://get.chezmoi.io)" -- init --apply robinsmith-source
 ```
+
+If chezmoi is already installed:
+
+```bash
+chezmoi init https://github.com/robinsmith-source/dotfiles.git
+```
+
+Review what would change before touching anything in `$HOME`:
+
+```bash
+chezmoi diff
+chezmoi apply
+```
+
+Or combine init and apply in one step once you're confident:
+
+```bash
+chezmoi init --apply --verbose https://github.com/robinsmith-source/dotfiles.git
+```
+
+`chezmoi apply` overwrites existing target files directly — there's no checkout conflict to
+work around, but `chezmoi diff` first is the safe way to see what will change.
 
 ### 3. Install packages
 
@@ -118,16 +133,12 @@ Pulls the latest dotfiles, updates system packages (pacman + AUR), then:
 
 ## Managing dotfiles
 
-Once checked out, `.config/fish/functions/dotfiles.fish` provides a `dotfiles` function
-scoped to the bare repo (the `dots` alias above is only needed before the first checkout):
+`.chezmoi.toml.tmpl` enables `autoCommit` with a commit-message prompt, so any change that
+touches the source directory — `chezmoi add`, `chezmoi re-add`, editing with `chezmoi edit` —
+asks for a commit message and commits automatically. Push is left manual:
 
 ```bash
-dotfiles status
-dotfiles add ~/.config/alacritty/alacritty.toml
-dotfiles commit -m "feat: update alacritty config"
-dotfiles push
+chezmoi status
+chezmoi add ~/.config/alacritty/alacritty.toml   # prompts for a commit message, then commits
+chezmoi git push
 ```
-
-Note that `.config/nvim/lua/matugen.lua` is **generated** by the Noctalia template hook on
-every theme change, so it shows as modified regularly. Commit it deliberately rather than
-sweeping it in with `dotfiles add -A`.

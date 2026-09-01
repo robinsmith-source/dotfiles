@@ -8,8 +8,6 @@ info()    { printf '\033[0;34m==> %s\033[0m\n' "$*"; }
 success() { printf '\033[0;32m  ✓ %s\033[0m\n' "$*"; }
 warn()    { printf '\033[0;33m  ! %s\033[0m\n' "$*"; }
 
-DOTS="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
-
 pkgver() { pacman -Q "$1" 2>/dev/null | awk '{print $2}'; }
 
 # Record versions of the desktop stack so we can tell the user what needs a restart.
@@ -19,8 +17,7 @@ before_noctalia=$(pkgver noctalia)
 # ── Dotfiles ──────────────────────────────────────────────────────────────────
 
 info "Pulling dotfiles..."
-$DOTS fetch origin
-$DOTS merge origin/"$(git --git-dir="$HOME/.dotfiles/" symbolic-ref --short HEAD)"
+chezmoi update --apply
 success "Dotfiles up to date."
 
 # ── Packages ──────────────────────────────────────────────────────────────────

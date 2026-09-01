@@ -1,5 +1,0 @@
-switch-events {
-    lid-close { 
-        spawn "sh" "-c" "qs -c noctalia-shell ipc call lockScreen lock"
-    }
-}
