@@ -3,6 +3,46 @@
 // You will have to remove "/-" and edit it before it takes effect.
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs
 
+{{- if .laptop }}
+
+output "eDP-1" {
+    mode "2880x1800@90.000"
+    scale 1.5
+    position x=-1000 y=0
+}
+
+output "eDP-2" {
+    mode "2880x1800@90"
+    scale 1.5
+    position x=2880 y=0
+}
+
+//LG-FHD HdM USB-C
+output "DP-1" {
+    mode "1920x1080@100"
+    scale 1
+    position x=0 y=-1080
+}
+
+//LG-FHD HdM USB-C
+output "DP-2" {
+    mode "1920x1080@100"
+    scale 1
+    position x=0 y=-2160
+}
+
+//LG-Ultrawide HDMI-A-1
+output "HDMI-A-1" {
+    mode "3440x1440@85.000"
+    scale 1
+    position x=-1720 y=-1440
+}
+
+debug {
+	disable-direct-scanout
+}
+{{- else }}
+
 output "DP-1" {
     mode "3440x1440@160" // Set resolution and refresh rate
     scale 1 // No scaling (use 2 for HiDPI)
@@ -14,11 +54,12 @@ output "DP-2" {
     scale 1 // No scaling (use 2 for HiDPI)
     transform "90"
     position x=3440 y=-420
-    
+
     layout {
         default-column-width { proportion 1.0; }
-	      preset-column-widths {
+        preset-column-widths {
             proportion 1.0
         }
     }
 }
+{{- end }}

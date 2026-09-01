@@ -4,9 +4,15 @@
 input {
     keyboard {
         xkb {
+{{- if .laptop }}
+          layout "de,us" // Use the American keyboard layout
+          variant ",intl"
+          options "grp:win_space_toggle, ctrl:nocaps"
+{{- else }}
           layout "us" // Use the American keyboard layout
           variant "altgr-intl"
           options "ctrl:nocaps"
+{{- end }}
         }
         numlock // Enable numlock on startup
     }
@@ -21,8 +27,12 @@ input {
         tap // Enable tap-to-click
         natural-scroll // Enable natural (macOS-style) scrolling
     }
-    
+
+{{- if .laptop }}
+    focus-follows-mouse // Automatically focus windows under the mouse pointer
+{{- else }}
     focus-follows-mouse max-scroll-amount="0%"
     // focus-follows-mouse // Automatically focus windows under the mouse pointer
+{{- end }}
     workspace-auto-back-and-forth // Enable workspace back & forth switching
 }
