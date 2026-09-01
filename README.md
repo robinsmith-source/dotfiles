@@ -142,3 +142,17 @@ chezmoi status
 chezmoi add ~/.config/alacritty/alacritty.toml   # prompts for a commit message, then commits
 chezmoi git push
 ```
+
+## Secrets
+
+Never hardcode a real secret (API key, token, session value) into a tracked file — this repo
+is public. `.chezmoi.toml.tmpl` sets `[bitwarden] unlock = "auto"`, so any `.tmpl` file can pull
+a value straight from the Bitwarden vault at `chezmoi apply` time and chezmoi handles unlocking
+for you:
+
+```
+{{ (bitwarden "item" "Item Name").login.password }}
+```
+
+CI also runs [gitleaks](https://github.com/gitleaks/gitleaks) on every push/PR to catch anything
+that slips through before it's merged.

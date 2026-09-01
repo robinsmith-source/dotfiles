@@ -1,12 +1,29 @@
-name: validate
+name: ci
 
-on: [push, pull_request]
+on: [pull_request, push]
+
+permissions:
+  contents: read
 
 jobs:
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: trufflesecurity/trufflehog@v3.97.1
+        with:
+          path: ./
+          extra_args: --only-verified
+      - uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: ludeeus/action-shellcheck@master
         with:
           scandir: "."
@@ -17,13 +34,13 @@ jobs:
             .replace(/,(\s*[}\]])/g, '\$1');
           JSON.parse(s);" {}
       - run: sudo apt-get install -y --no-install-recommends lua-check
-      - run: luacheck dot_config/nvim --globals vim --no-max-line-length --exclude-files dot_config/nvim/lua/plugins/example.lua
+      - run: luacheck dot_config/nvim --globals vim --no-max-line-length --exclude-files dot_config/nvim/lua/plugins/executable_example.lua
 
   arch:
     runs-on: ubuntu-latest
     container: archlinux:latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: pacman -Syu --noconfirm niri fish
       - run: mkdir -p ~/.config && cp -r dot_config/niri ~/.config/niri && niri validate
       - run: find dot_config/fish -name '*.fish' | xargs -I{} fish --no-execute {}
