@@ -6,6 +6,7 @@ packages:
     - openssh
     - curl
     - wget
+    - unzip
     - less
     - chezmoi
 

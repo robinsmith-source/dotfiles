@@ -5,15 +5,18 @@ command -v bw &>/dev/null && exit 0
 
 case "$(uname -s)" in
 Linux)
-    if command -v pacman &>/dev/null; then
-        sudo pacman -S --needed --noconfirm bitwarden-cli
+    tmpdir=$(mktemp -d)
+    if curl -fsSL "https://bitwarden.com/download/?app=cli&platform=linux" -o "$tmpdir/bw.zip" \
+        && unzip -oq "$tmpdir/bw.zip" -d "$tmpdir"; then
+        sudo install -Dm755 "$tmpdir/bw" /usr/local/bin/bw
     else
-        echo "install-password-manager: no supported package manager found" >&2
-        exit 1
+        echo "install-password-manager: failed to download bw — install it manually into \$PATH" >&2
     fi
+    rm -rf "$tmpdir"
     ;;
 *)
     echo "install-password-manager: unsupported OS $(uname -s)" >&2
-    exit 1
     ;;
 esac
+
+exit 0
