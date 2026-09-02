@@ -1,0 +1,102 @@
+packages:
+  pacman:
+    # build essentials
+    - base-devel
+    - git
+    - openssh
+    - curl
+    - wget
+    - less
+    - chezmoi
+
+    # desktop: niri + noctalia
+    - niri
+    - noctalia # noctalia 5.x — provides the `noctalia` binary directly
+    - xwayland-satellite # X11 apps under niri
+    - xdg-desktop-portal
+    - xdg-desktop-portal-gnome
+    - xdg-desktop-portal-gtk
+    - capitaine-cursors # cursor theme referenced in niri/cfg/misc.kdl
+    - wl-clipboard # wl-copy / wl-paste — clipboard history + screenshots
+    - cliphist # clipboard history store (noctalia appLauncher)
+    - adw-gtk-theme
+
+    # noctalia widget / plugin dependencies
+    - cava # audio visualizer widget
+    - ddcutil # external monitor brightness (brightness.enableDdcSupport)
+    - brightnessctl # internal backlight control
+    - upower # battery widget
+    - power-profiles-daemon # PowerProfile shortcut + battery widget
+    - networkmanager # Network / VPN widgets
+    - bluez # Bluetooth widget
+    - bluez-utils
+    - pavucontrol # Volume widget middle-click fallback
+    - pwvucontrol # preferred PipeWire mixer
+    - gpu-screen-recorder # screen-recorder plugin
+    - wl-mirror # mirror-mirror plugin + Mod+Ctrl+E keybind
+    - tailscale # tailscale plugin
+    - polkit # noctalia's built-in polkit-agent plugin
+
+    # terminal & shell
+    - alacritty
+    - fish
+    - kitty-terminfo # SSH compatibility when using kitty/alacritty
+
+    # editors
+    - neovim
+    - luarocks # neovim plugin dependencies
+    - zed
+
+    # GUI apps
+    - nautilus
+    - gnome-keyring # spawned by niri/cfg/autostart.kdl
+
+    # system monitoring
+    - btop # Mod+P, and noctalia's externalMonitor command
+    - fastfetch
+
+    # dev tools
+    - lazygit
+    - github-cli
+    - docker
+    - docker-buildx
+    - docker-compose
+    - lazydocker
+    - bun # JavaScript runtime / package manager
+    - opencode # AI coding assistant
+
+    # CLI essentials
+    - fzf
+    - eza
+    - zoxide
+    - bat
+    - ripgrep
+    - fd
+    - jq # used by the Mod+Ctrl+E mirror keybind
+    - gum
+    - man-db
+    - tldr
+
+    # fonts
+    - ttf-jetbrains-mono-nerd # "JetBrainsMono NF" — noctalia ui.fontDefault
+    - noto-fonts
+    - noto-fonts-emoji
+
+    # misc system
+    - xdg-utils
+
+  # Only available in the CachyOS repos; not on plain Arch.
+  pacman_cachyos:
+    - cachyos-niri-noctalia # niri + noctalia settings meta package
+    - cachyos-alacritty-config
+    - zen-browser-bin # browser (Mod+B in niri keybinds)
+    - claude-code # Anthropic Claude CLI
+
+  aur:
+    - visual-studio-code-bin # VS Code (Mod+V in niri keybinds) — Marketplace build
+
+  # zen-browser-bin / claude-code are CachyOS-repo packages; fall back to the AUR
+  # when not on CachyOS.
+  aur_noncachyos:
+    - zen-browser-bin
+    - claude-code

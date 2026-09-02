@@ -27,6 +27,7 @@ jobs:
       - uses: ludeeus/action-shellcheck@master
         with:
           scandir: "."
+          ignore_names: "run_once_setup.sh.tmpl run_onchange_install-packages.sh.tmpl"
       - run: |
           find . \( -name '*.json' -o -name '*.jsonc' \) ! -path './.git/*' ! -path './.claude/*' | xargs -I{} node -e "
           const s = require('fs').readFileSync(process.argv[1],'utf8')
@@ -34,13 +35,17 @@ jobs:
             .replace(/,(\s*[}\]])/g, '\$1');
           JSON.parse(s);" {}
       - run: sudo apt-get install -y --no-install-recommends lua-check
-      - run: luacheck dot_config/nvim --globals vim --no-max-line-length --exclude-files dot_config/nvim/lua/plugins/executable_example.lua
+      - run: luacheck home/dot_config/nvim --globals vim --no-max-line-length --exclude-files home/dot_config/nvim/lua/plugins/executable_example.lua
 
   arch:
     runs-on: ubuntu-latest
     container: archlinux:latest
     steps:
       - uses: actions/checkout@v7
-      - run: pacman -Syu --noconfirm niri fish
-      - run: mkdir -p ~/.config && cp -r dot_config/niri ~/.config/niri && niri validate
-      - run: find dot_config/fish -name '*.fish' | xargs -I{} fish --no-execute {}
+      - run: pacman -Syu --noconfirm niri fish chezmoi sudo
+      # Check out to the canonical chezmoi source path so hooks/scripts that
+      # assume it (e.g. the Bitwarden install hook) resolve correctly.
+      - run: mkdir -p ~/.local/share && cp -r "$GITHUB_WORKSPACE" ~/.local/share/chezmoi
+      - run: chezmoi init --apply --promptDefaults --exclude=scripts
+      - run: niri validate
+      - run: find ~/.config/fish -name '*.fish' | xargs -I{} fish --no-execute {}

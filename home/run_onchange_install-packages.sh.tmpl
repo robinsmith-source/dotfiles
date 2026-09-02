@@ -1,0 +1,44 @@
+{{- if eq .chezmoi.os "linux" -}}
+#!/usr/bin/env bash
+set -euo pipefail
+
+if command -v paru &>/dev/null; then
+    AUR=paru
+elif command -v yay &>/dev/null; then
+    AUR=yay
+else
+    AUR=""
+fi
+
+PACMAN_PKGS=(
+{{- range .packages.pacman }}
+    {{ . | quote }}
+{{- end }}
+{{- if eq .chezmoi.osRelease.id "cachyos" }}
+{{- range .packages.pacman_cachyos }}
+    {{ . | quote }}
+{{- end }}
+{{- end }}
+)
+
+AUR_PKGS=(
+{{- range .packages.aur }}
+    {{ . | quote }}
+{{- end }}
+{{- if ne .chezmoi.osRelease.id "cachyos" }}
+{{- range .packages.aur_noncachyos }}
+    {{ . | quote }}
+{{- end }}
+{{- end }}
+)
+
+echo "==> Installing ${#PACMAN_PKGS[@]} official packages..."
+sudo pacman -S --needed --noconfirm "${PACMAN_PKGS[@]}"
+
+if [[ -n $AUR && ${#AUR_PKGS[@]} -gt 0 ]]; then
+    echo "==> Installing ${#AUR_PKGS[@]} AUR packages via $AUR..."
+    $AUR -S --needed --noconfirm "${AUR_PKGS[@]}"
+elif [[ ${#AUR_PKGS[@]} -gt 0 ]]; then
+    echo "==> No AUR helper found — skipping: ${AUR_PKGS[*]}" >&2
+fi
+{{ end -}}

@@ -23,15 +23,16 @@ Packages come from the CachyOS repos, primarily the `cachyos-niri-noctalia` meta
 
 ### 1. Prerequisites (optional)
 
-Nearly everything now lives in the CachyOS repos. An AUR helper is only needed for
-`visual-studio-code-bin` — `install.sh` skips AUR packages with a warning if none is found.
+Nearly everything lives in the CachyOS repos or gets installed automatically (see below).
+An AUR helper is only needed for `visual-studio-code-bin` — it's skipped with a warning if
+none is found.
 
 ```bash
 sudo pacman -S --needed base-devel git
 git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si
 ```
 
-### 2. Clone the dotfiles
+### 2. Run chezmoi
 
 On a fresh machine with no chezmoi installed yet, this installs it and runs init + apply
 in one line:
@@ -43,56 +44,41 @@ sh -c "$(curl -fsLS https://get.chezmoi.io)" -- init --apply robinsmith-source
 If chezmoi is already installed:
 
 ```bash
-chezmoi init https://github.com/robinsmith-source/dotfiles.git
+chezmoi init --apply https://github.com/robinsmith-source/dotfiles.git
 ```
 
-Review what would change before touching anything in `$HOME`:
+Or review first with `chezmoi init` + `chezmoi diff` + `chezmoi apply` if you'd rather see
+what will change before touching `$HOME`.
 
-```bash
-chezmoi diff
-chezmoi apply
-```
+`chezmoi apply` does everything from here on its own — packages, a one-time machine setup,
+and config validation are all wired into chezmoi's own script system (see below), no
+separate install script to run.
 
-Or combine init and apply in one step once you're confident:
+### 3. What happens automatically
 
-```bash
-chezmoi init --apply --verbose https://github.com/robinsmith-source/dotfiles.git
-```
-
-`chezmoi apply` overwrites existing target files directly — there's no checkout conflict to
-work around, but `chezmoi diff` first is the safe way to see what will change.
-
-### 3. Install packages
-
-```bash
-bash ~/install.sh
-```
-
-Or skip cloning entirely and run it directly:
-
-```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/robinsmith-source/dotfiles/main/install.sh)
-```
-
-Use `bash <(curl ...)`, not `curl ... | bash` — the latter breaks the interactive prompts.
-
-The script installs packages, enables services (docker, sshd, bluetooth, NetworkManager,
-power-profiles-daemon, tailscaled), sets your Git identity and timezone/locale, makes fish
-the default shell, creates `~/Pictures/Wallpapers`, and validates both configs at the end.
-
-Three prompts default to **no** and are safe to decline:
-
-- **Removing `cachyos-desktop-settings`** — it conflicts with `cachyos-niri-noctalia`.
-  Declining aborts the install rather than leaving a half-applied state.
-- **Installing `noctalia-greeter`** — the greetd login screen.
-- **Enabling greetd** — this swaps your login path. Decline to keep starting niri from a TTY.
+- **Bitwarden CLI** is installed before anything else runs, so templates can pull secrets
+  from your vault (`.chezmoi.toml.tmpl`'s `read-source-state.pre` hook).
+- **Packages** — the full list lives in `home/.chezmoidata/packages.yaml`; a
+  `run_onchange_` script installs anything missing via pacman/AUR whenever that list
+  changes.
+- **One-time setup** (`run_once_setup.sh.tmpl`) — prompts for timezone/locale, enables
+  services (docker, sshd, bluetooth, NetworkManager, power-profiles-daemon, tailscaled),
+  adds you to the docker group, sets fish as the default shell, creates
+  `~/Pictures/Wallpapers`, brings up Tailscale (pulling an auth key from Bitwarden if a
+  "Tailscale auth key" vault item exists, otherwise just reminds you), and — on CachyOS —
+  optionally offers to install/enable the `noctalia-greeter` login screen (defaults to no;
+  declining keeps you starting niri from a TTY).
+- **Config validation** (`run_after_validate-configs.sh`) — runs after every apply: `niri
+  validate`, `noctalia config validate`, a `.pacnew` report, and a stale
+  `~/.config/noctalia/settings.json` warning.
+- **Git identity** — prompted once via chezmoi (`gitName`/`gitEmail`) and templated into
+  `~/.gitconfig`.
 
 ### 4. Post-install
 
 - Log out and back in for the docker group and shell change to take effect.
 - Start niri from a TTY with `niri-session`, or pick it at your greeter.
 - Drop wallpapers into `~/Pictures/Wallpapers`.
-- Run `sudo tailscale up` to finish Tailscale setup (the Noctalia plugin depends on it).
 - See [docs.noctalia.dev](https://docs.noctalia.dev) for shell configuration.
 
 ## Noctalia 5.x config layout
@@ -120,16 +106,16 @@ noctalia config validate
 ## Updating
 
 ```bash
-bash ~/update.sh
+chezmoi update
 ```
 
-Pulls the latest dotfiles, updates system packages (pacman + AUR), then:
+Pulls the latest dotfiles and re-applies: installs any newly-added packages, re-validates
+the niri and noctalia configs (so a retired config key surfaces immediately rather than as
+a black screen at next login), and reports `.pacnew` files.
 
-- validates the niri and noctalia configs, so a retired config key surfaces immediately
-  rather than as a black screen at next login
-- reports any `.pacnew` files left to merge
-- flags leftover `settings.json` / stale `qs -c noctalia-shell` commands
-- reloads Noctalia in place when it was upgraded, and tells you when niri needs a re-login
+This does **not** upgrade already-installed packages — run `sudo pacman -Syu` (and your AUR
+helper's update command) yourself when you want a full system upgrade. Keeping that manual
+avoids a routine `chezmoi apply` for a config tweak turning into a surprise system upgrade.
 
 ## Managing dotfiles
 

@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+# One-time machine setup: locale/timezone, services, shell, wallpaper dir,
+# Tailscale, and (CachyOS only) the optional greeter.
+set -euo pipefail
+
+# ── Locale & timezone ─────────────────────────────────────────────────────────
+
+current_tz=$(timedatectl show --property=Timezone --value 2>/dev/null || echo "UTC")
+read -rp "Timezone [$current_tz]: " tz
+tz="${tz:-$current_tz}"
+sudo timedatectl set-timezone "$tz"
+sudo timedatectl set-ntp true
+
+current_locale=$(locale | grep '^LANG=' | cut -d= -f2 || echo "")
+read -rp "Locale [${current_locale:-en_US.UTF-8}]: " locale
+locale="${locale:-${current_locale:-en_US.UTF-8}}"
+if ! grep -q "^${locale}" /etc/locale.gen; then
+    sudo sed -i "s|^#${locale}|${locale}|" /etc/locale.gen
+    sudo locale-gen
+fi
+sudo localectl set-locale "LANG=${locale}"
+
+# ── Services ──────────────────────────────────────────────────────────────────
+
+for svc in docker.service sshd.service bluetooth.service NetworkManager.service \
+           power-profiles-daemon.service tailscaled.service; do
+    if systemctl list-unit-files "$svc" --no-legend -q &>/dev/null; then
+        sudo systemctl enable --now "$svc" 2>/dev/null || echo "Could not enable $svc." >&2
+    fi
+done
+
+# `pacman -Q docker` matches provides, so podman-docker satisfies it and the real
+# docker package/service may be absent. Only touch the group if it exists.
+if getent group docker &>/dev/null; then
+    sudo usermod -aG docker "$USER"
+fi
+
+# ── Default shell ─────────────────────────────────────────────────────────────
+
+if [[ "$SHELL" != "$(command -v fish)" ]]; then
+    chsh -s "$(command -v fish)"
+    echo "Default shell changed to fish. Log out to apply."
+fi
+
+# ── Wallpapers ────────────────────────────────────────────────────────────────
+# noctalia's wallpaper.directory points here; it warns on every start if missing.
+
+mkdir -p "$HOME/Pictures/Wallpapers"
+
+# ── Tailscale ─────────────────────────────────────────────────────────────────
+# Pulls an auth key from Bitwarden if a "Tailscale auth key" item exists; falls
+# back to a manual reminder otherwise (interactive `tailscale up` needs a login flow).
+
+if command -v tailscale &>/dev/null && ! tailscale status &>/dev/null; then
+    authkey=""
+    if command -v bw &>/dev/null; then
+        authkey=$(bw get item "Tailscale auth key" 2>/dev/null | jq -r '.login.password // empty' 2>/dev/null || true)
+    fi
+    if [[ -n $authkey ]]; then
+        sudo tailscale up --authkey="$authkey"
+    else
+        echo "Run 'sudo tailscale up' to finish Tailscale setup (the noctalia plugin needs it)."
+    fi
+fi
+
+{{ if eq .chezmoi.osRelease.id "cachyos" -}}
+# ── Greeter (opt-in) ──────────────────────────────────────────────────────────
+# noctalia-greeter is a greetd greeter. Enabling it swaps your login path, so it
+# stays opt-in — if it misbehaves you are left at a TTY.
+
+if ! pacman -Q noctalia-greeter &>/dev/null; then
+    read -rp "Install noctalia-greeter (greetd login screen)? [y/N]: " reply
+    if [[ ${reply,,} == y* ]]; then
+        sudo pacman -S --needed --noconfirm noctalia-greeter
+    fi
+fi
+
+if pacman -Q noctalia-greeter &>/dev/null && [[ $(systemctl is-enabled greetd 2>/dev/null) != enabled ]]; then
+    echo "greetd is installed but not enabled — niri currently starts from a TTY."
+    read -rp "Enable greetd as the display manager? [y/N]: " reply
+    if [[ ${reply,,} == y* ]]; then
+        sudo systemctl enable greetd.service
+        echo "Verify /etc/greetd/config.toml launches noctalia-greeter before rebooting."
+    fi
+fi
+{{ end -}}

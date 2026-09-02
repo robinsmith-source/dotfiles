@@ -1,5 +1,7 @@
 [data]
     laptop = {{ eq .chezmoi.hostname "goblin" }}
+    gitName = {{ promptStringOnce . "gitName" "Git user name" "Robin Schmidt" | quote }}
+    gitEmail = {{ promptStringOnce . "gitEmail" "Git email address" "schmidtrobin02@gmail.com" | quote }}
 [git]
     autoCommit = true
     commitMessageTemplate = "{{ "{{" }} promptString `Commit message` {{ "}}" }}"
@@ -10,3 +12,6 @@
     args = ["--diff", "{{ "{{" }} .Destination {{ "}}" }}", "{{ "{{" }} .Target {{ "}}" }}"]
 [bitwarden]
     unlock = "auto"
+
+[hooks.read-source-state.pre]
+    command = "{{ .chezmoi.homeDir }}/.local/share/chezmoi/.install-password-manager.sh"
