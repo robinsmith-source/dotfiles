@@ -62,7 +62,6 @@ packages:
     - fd
     - jq
     - tldr
-    - gum
 
     # fonts
     - ttf-jetbrains-mono-nerd

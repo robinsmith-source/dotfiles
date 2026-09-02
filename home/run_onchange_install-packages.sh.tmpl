@@ -41,16 +41,10 @@ if [[ $total -eq 0 ]]; then
     exit 0
 fi
 
-if command -v gum &>/dev/null; then
-    gum style --bold --foreground 212 "$total package(s) to install:"
-    printf '%s\n' "${pacman_missing[@]}" "${aur_missing[@]}" | gum style --foreground 42 --padding "0 2"
-    gum confirm "Install now?" || exit 0
-else
-    echo "$total package(s) to install:"
-    printf '  + %s\n' "${pacman_missing[@]}" "${aur_missing[@]}"
-    read -rp "Install now? [Y/n]: " reply
-    [[ -z $reply || ${reply,,} == y* ]] || exit 0
-fi
+echo "$total package(s) to install:"
+printf '  + %s\n' "${pacman_missing[@]}" "${aur_missing[@]}"
+read -rp "Install now? [Y/n]: " reply
+[[ -z $reply || ${reply,,} == y* ]] || exit 0
 
 if [[ ${#pacman_missing[@]} -gt 0 ]]; then
     sudo pacman -S --needed --noconfirm "${pacman_missing[@]}"
