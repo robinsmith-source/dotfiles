@@ -1,3 +1,12 @@
 [user]
     name = {{ .gitName }}
     email = {{ .gitEmail }}
+
+[gpg]
+    format = ssh
+[gpg "ssh"]
+    defaultKeyCommand = "ssh-add -L"
+[commit]
+    gpgsign = true
+[tag]
+    gpgsign = true
