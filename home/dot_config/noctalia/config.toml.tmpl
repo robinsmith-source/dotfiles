@@ -52,7 +52,11 @@ enabled = true
     type = "google"
 
 [control_center]
+{{- if .laptop }}
+hidden_tabs = [ ]
+{{- else }}
 hidden_tabs = [ "monitor", "power" ]
+{{- end }}
 
     [control_center.calendar]
     show_week_numbers = true
