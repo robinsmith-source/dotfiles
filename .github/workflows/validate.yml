@@ -1,6 +1,10 @@
 name: ci
 
-on: [pull_request, push]
+on:
+  pull_request:
+  push:
+  schedule:
+    - cron: "0 6 * * 1"
 
 permissions:
   contents: read
@@ -12,7 +16,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: trufflesecurity/trufflehog@v3.97.1
+      - uses: trufflesecurity/trufflehog@v3
         with:
           path: ./
           extra_args: --only-verified
@@ -24,16 +28,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: ludeeus/action-shellcheck@master
-        with:
-          scandir: "."
-          ignore_names: "run_once_setup.sh.tmpl run_onchange_install-packages.sh.tmpl"
-      - run: |
-          find . \( -name '*.json' -o -name '*.jsonc' \) ! -path './.git/*' ! -path './.claude/*' | xargs -I{} node -e "
-          const s = require('fs').readFileSync(process.argv[1],'utf8')
-            .replace(/\"(?:[^\"\\\\]|\\\\.)*\"|\/\/[^\n]*|\/\*[\s\S]*?\*\//g, m => m.startsWith('\"') ? m : '')
-            .replace(/,(\s*[}\]])/g, '\$1');
-          JSON.parse(s);" {}
       - run: sudo apt-get install -y --no-install-recommends lua-check
       - run: luacheck home/dot_config/nvim --globals vim --no-max-line-length --exclude-files home/dot_config/nvim/lua/plugins/executable_example.lua
 

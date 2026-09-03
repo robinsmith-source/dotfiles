@@ -53,6 +53,7 @@ packages:
     - docker-buildx
     - lazydocker
     - opencode
+    - pre-commit
 
     # CLI essentials
     - fzf

@@ -1,0 +1,7 @@
+[extend]
+useDefault = true
+
+[[rules]]
+id = "personal-address"
+description = "Static home/street/mailing address"
+regex = '''(?i)address\s*(?:"\s*:|[:=])\s*.{4,}'''
