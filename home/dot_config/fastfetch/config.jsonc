@@ -3,8 +3,6 @@
   "modules": [
     "break",
     "break",
-    "break",
-    "break",
     "title",
     "separator",
     "os",
@@ -23,7 +21,11 @@
   ],
   "logo": {
     "type": "file-raw",
-    "source": "$HOME/.config/fastfetch/logo.txt"
+    "source": "$HOME/.config/fastfetch/logo.txt",
+    "padding": {
+      "left": 8,
+      "right": 8
+    }
   },
   "display": {
     "color": {
