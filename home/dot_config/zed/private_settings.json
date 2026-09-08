@@ -28,9 +28,7 @@
   "agent_servers": {
     "claude-acp": {
       "favorite_config_option_values": {
-        "model": [
-          "sonnet"
-        ]
+        "model": ["sonnet"]
       },
       "default_config_options": {
         "mode": "auto",
