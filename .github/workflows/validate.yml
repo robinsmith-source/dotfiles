@@ -3,6 +3,8 @@ name: ci
 on:
   pull_request:
   push:
+    branches:
+      - cachyos
   schedule:
     - cron: "0 6 * * 1"
 
