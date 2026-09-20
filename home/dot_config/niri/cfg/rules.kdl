@@ -35,11 +35,11 @@
       match app-id="zen$"
       match app-id="firefox$"
       match app-id="chrome$"
-      match app-id="discord" 
-      match app-id="obsidian" 
+      match app-id="discord"
+      match app-id="obsidian"
       open-maximized true
     }
-    
+
     window-rule {
       match app-id=r#"^alacritty$"#
       open-on-output "DP-1"
@@ -50,6 +50,7 @@
       match app-id=r#"^discord$"#
       open-on-output "DP-2"
       default-column-width { proportion 1.0; }
+
     }
 
     window-rule {

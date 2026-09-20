@@ -92,4 +92,3 @@ packages:
 
   aur:
     - cliamp
-    - fetch-git
