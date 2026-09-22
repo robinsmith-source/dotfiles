@@ -61,11 +61,20 @@ screenshots it, closes everything and force-pushes the image. Use `--local` to o
 
 ## Secrets
 
-This repo is public. Never commit secrets; pull them from Bitwarden in `.tmpl` files instead:
+This repo is public, so no secrets are stored in it. They live in Bitwarden and are filled in
+when chezmoi applies:
 
-```
-{{ (bitwarden "item" "Item Name").login.password }}
-```
+- **Tokens and passwords**: reference the Bitwarden item from a `.tmpl` file. chezmoi unlocks
+  `bw` automatically when a template needs it.
+
+  ```toml
+  # home/dot_config/example/config.toml.tmpl
+  api_token = {{ (bitwarden "item" "Example API").login.password | quote }}
+  ```
+
+- **SSH keys**: never touch disk. The Bitwarden SSH agent serves them for SSH and commit signing.
+
+gitleaks blocks commits that look like they contain a secret, just in case.
 
 ## Checks
 
