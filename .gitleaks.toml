@@ -4,4 +4,4 @@ useDefault = true
 [[rules]]
 id = "personal-address"
 description = "Static home/street/mailing address"
-regex = '''(?i)address\s*(?:"\s*:|[:=])\s*.{4,}'''
+regex = '''(?i)(?:^|[^\w.-])(?:home|street|mailing|postal)?[_-]?address\s*(?:"\s*:|[:=])\s*["']?[^"'\n]*(?:[a-zäöüß]{3,}[^"'\n]*\d|\d[^"'\n]*[a-zäöüß]{3,})'''
