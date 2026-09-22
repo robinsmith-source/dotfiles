@@ -31,17 +31,24 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - run: sudo apt-get install -y --no-install-recommends lua-check
-      - run: luacheck home/dot_config/nvim --globals vim --no-max-line-length --exclude-files home/dot_config/nvim/lua/plugins/executable_example.lua
+      - run: luacheck home/dot_config/nvim --globals vim --no-max-line-length
+      # shellcheck, shfmt, stylua, gitleaks and file sanity checks
+      - run: pipx run pre-commit run --all-files --show-diff-on-failure
 
   arch:
     runs-on: ubuntu-latest
     container: archlinux:latest
     steps:
       - uses: actions/checkout@v7
-      - run: pacman -Syu --noconfirm niri fish chezmoi sudo
+      - run: pacman -Syu --noconfirm niri noctalia fish chezmoi sudo shellcheck
       # Check out to the canonical chezmoi source path so hooks/scripts that
       # assume it (e.g. the Bitwarden install hook) resolve correctly.
       - run: mkdir -p ~/.local/share && cp -r "$GITHUB_WORKSPACE" ~/.local/share/chezmoi
       - run: chezmoi init --apply --promptDefaults --exclude=scripts
       - run: niri validate
+      - run: noctalia config validate
       - run: find ~/.config/fish -name '*.fish' | xargs -I{} fish --no-execute {}
+      # pre-commit skips .tmpl files, so lint the rendered install script here
+      - run: chezmoi execute-template < home/run_onchange_install-packages.sh.tmpl | shellcheck -s bash -
+      # catch typos/renamed packages (CachyOS-only and AUR lists aren't resolvable here)
+      - run: chezmoi execute-template '{{ range concat .packages.pacman .packages.pacman_laptop }}{{ . }} {{ end }}' | xargs pacman -Si > /dev/null
