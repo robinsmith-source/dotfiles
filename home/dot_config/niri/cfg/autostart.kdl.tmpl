@@ -3,4 +3,6 @@
 
 spawn-at-startup "noctalia"
 spawn-at-startup "gnome-keyring-daemon" "--start" "--components=secrets"
+{{- if not .laptop }}
 spawn-at-startup "niri" "msg" "action" "focus-monitor" "DP-1"
+{{- end }}
