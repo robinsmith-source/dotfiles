@@ -1,0 +1,4 @@
+.config/niri/animations
+.config/nvim/README.md
+.config/nvim/.gitignore
+.config/nvim/lua/plugins/example.lua
