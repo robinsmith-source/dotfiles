@@ -2,6 +2,8 @@
 
 CachyOS + [Niri](https://github.com/YaLTeR/niri) + [Noctalia](https://docs.noctalia.dev), managed with [chezmoi](https://www.chezmoi.io).
 
+![desktop](https://raw.githubusercontent.com/robinsmith-source/dotfiles/screenshots/screenshot.png)
+
 ## What's inside
 
 | Config | Notes |
@@ -50,6 +52,12 @@ sudo pacman -Syu                               # upgrade installed packages
 
 To add a package, put it in the right list in `packages.yaml`. Use `pacman`, `pacman_laptop`,
 `pacman_cachyos` or `aur`.
+
+## Screenshot
+
+The image above lives on the `screenshots` branch. To refresh it, push with `SCREENSHOT=1 git push`
+or run `scripts/screenshot.sh`. It opens a demo workspace (nvim, fastfetch, btop) on `DP-1`,
+screenshots it, closes everything and force-pushes the image. Use `--local` to only save it.
 
 ## Secrets
 
