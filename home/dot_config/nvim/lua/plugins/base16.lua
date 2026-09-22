@@ -1,5 +1,6 @@
-return { 'RRethy/base16-nvim',
+return {
+  "RRethy/base16-nvim",
   config = function()
-    require('matugen').setup()
+    require("matugen").setup()
   end,
 }
