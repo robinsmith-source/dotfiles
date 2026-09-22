@@ -2,6 +2,8 @@
 set -euo pipefail
 
 command -v bw &>/dev/null && exit 0
+# never sudo-install from CI; templates there must not depend on bw
+[[ -n ${CI:-} ]] && exit 0
 
 case "$(uname -s)" in
 Linux)
