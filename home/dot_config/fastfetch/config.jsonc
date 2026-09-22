@@ -25,6 +25,10 @@
     "padding": {
       "left": 8,
       "right": 8
+    },
+    "color": {
+      "1": "#33b1ff",
+      "2": "#42be65"
     }
   },
   "display": {
