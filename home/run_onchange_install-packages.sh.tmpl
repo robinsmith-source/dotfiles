@@ -30,10 +30,10 @@ missing() {  # missing <array...> — prints only the ones not currently install
     done
 }
 
-pacman_missing=($(missing "${PACMAN_PKGS[@]}"))
+mapfile -t pacman_missing < <(missing "${PACMAN_PKGS[@]}")
 aur_missing=()
 if [[ ${#AUR_PKGS[@]} -gt 0 ]]; then
-    aur_missing=($(missing "${AUR_PKGS[@]}"))
+    mapfile -t aur_missing < <(missing "${AUR_PKGS[@]}")
 fi
 
 total=$(( ${#pacman_missing[@]} + ${#aur_missing[@]} ))

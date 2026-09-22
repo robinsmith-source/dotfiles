@@ -3,9 +3,17 @@
 set -euo pipefail
 
 if command -v niri &>/dev/null && [[ -f "$HOME/.config/niri/config.kdl" ]]; then
-    niri validate && echo "niri config is valid." || echo "niri config has errors." >&2
+    if niri validate; then
+        echo "niri config is valid."
+    else
+        echo "niri config has errors." >&2
+    fi
 fi
 
 if command -v noctalia &>/dev/null; then
-    noctalia config validate && echo "noctalia config is valid." || echo "noctalia config has errors." >&2
+    if noctalia config validate; then
+        echo "noctalia config is valid."
+    else
+        echo "noctalia config has errors." >&2
+    fi
 fi
