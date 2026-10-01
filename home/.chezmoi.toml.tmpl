@@ -10,6 +10,9 @@
 [diff]
     command = "zeditor"
     args = ["--diff", "{{ "{{" }} .Destination {{ "}}" }}", "{{ "{{" }} .Target {{ "}}" }}"]
+    exclude = ["scripts"]
+[status]
+    exclude = ["scripts"]
 [bitwarden]
     unlock = "auto"
 
