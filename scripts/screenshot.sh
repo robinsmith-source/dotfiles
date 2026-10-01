@@ -1,85 +1,64 @@
 #!/usr/bin/env bash
-# Stage a showcase workspace (nvim + fastfetch + btop), screenshot it and publish it to the
-# `screenshots` branch that the README embeds.
-#
-#   scripts/screenshot.sh           take + publish
-#   scripts/screenshot.sh --local   take only, print the file path
-#   SCREENSHOT=1 git push           take + publish from the pre-push hook
+# Usage: screenshot.sh              capture and print the image path
+#        screenshot.sh --publish    push the captured image to the screenshots branch
 set -euo pipefail
 
-if [[ ${1:-} == --on-push ]]; then
-    [[ -n ${SCREENSHOT:-} ]] || exit 0
-fi
-[[ -n ${NIRI_SOCKET:-} ]] || {
-    echo "screenshot: not running inside niri, skipping" >&2
+REPO=$(git -C "$(dirname "$0")" rev-parse --show-toplevel)
+SHOT=${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles/screenshot.png
+OUTPUT=DP-1
+
+if [[ ${1:-} == --publish ]]; then
+    [[ -s $SHOT ]] || {
+        echo "nothing to publish, capture one first" >&2
+        exit 1
+    }
+    blob=$(git -C "$REPO" hash-object -w "$SHOT")
+    tree=$(printf '100644 blob %s\tscreenshot.png\n' "$blob" | git -C "$REPO" mktree)
+    commit=$(git -C "$REPO" commit-tree "$tree" -m "chore: update screenshot")
+    git -C "$REPO" push -f -q origin "$commit:refs/heads/screenshots"
     exit 0
-}
+fi
 
-OUTPUT=${SCREENSHOT_OUTPUT:-DP-1}
-REPO=$(git rev-parse --show-toplevel)
-SHOT="$(mktemp -d)/screenshot.png"
-
+IDS=()
 prev_output=$(niri msg -j focused-output | jq -r .name)
-prev_ws=$(niri msg -j workspaces | jq -r '.[] | select(.is_focused) | .idx')
+prev_ws=$(niri msg -j workspaces | jq '.[] | select(.is_focused) | .idx')
 
 cleanup() {
-    niri msg -j windows |
-        jq -r '.[] | select(.app_id // "" | startswith("showcase-")) | .id' |
-        while read -r id; do niri msg action close-window --id "$id"; done
+    for id in "${IDS[@]}"; do
+        niri msg action close-window --id "$id"
+    done
     niri msg action focus-monitor "$prev_output"
     niri msg action focus-workspace "$prev_ws"
 }
 trap cleanup EXIT
 
-wait_for() { # wait_for <app-id>, until it exists and has focus
-    for _ in {1..50}; do
-        niri msg -j windows | jq -e --arg id "$1" 'any(.[]; .app_id == $id and .is_focused)' >/dev/null && return
-        sleep 0.1
-    done
-    echo "screenshot: timed out waiting for $1" >&2
-    exit 1
+focused() { niri msg -j focused-window | jq -r .id; }
+
+spawn() {
+    local prev
+    prev=$(focused)
+    niri msg action spawn -- alacritty --working-directory "$REPO" "$@"
+    until [[ $(focused) != "$prev" ]]; do sleep 0.1; done
+    IDS+=("$(focused)")
 }
 
-spawn() { # spawn <app-id> <command...>
-    niri msg action spawn -- alacritty --class "$1" --working-directory "$REPO" -e "${@:2}"
-    wait_for "$1"
-}
-
-# The last workspace on an output is always empty in niri.
 niri msg action focus-monitor "$OUTPUT"
-empty_ws=$(niri msg -j workspaces | jq -r --arg o "$OUTPUT" '[.[] | select(.output == $o)] | max_by(.idx) | .idx')
-niri msg action focus-workspace "$empty_ws"
+niri msg action focus-workspace "$(niri msg -j workspaces | jq --arg o "$OUTPUT" '[.[] | select(.output == $o) | .idx] | max')"
 
-# Left column: nvim. Right column: fastfetch stacked above btop.
-spawn showcase-nvim nvim home/dot_config/niri/cfg/keybinds.kdl
-niri msg action set-column-width 50%
-spawn showcase-fetch fish -C fastfetch
-spawn showcase-btop btop --preset 4 # cpu + mem only, no process list or IPs
+spawn --class showcase-nvim -e nvim
+niri msg action set-column-width 33.333%
+spawn
+niri msg action set-column-width 33.333%
+spawn --class showcase-btop -e btop
 niri msg action consume-or-expel-window-left
-niri msg action set-column-width 50%
+spawn --class showcase-cliamp -e cliamp --auto-play
+niri msg action set-column-width 33.333%
 niri msg action focus-column-first
 niri msg action center-visible-columns
 
-sleep "${SCREENSHOT_DELAY:-3}" # let nvim load plugins and btop draw a few samples
-niri msg action screenshot-screen --show-pointer false --path "$SHOT"
-for _ in {1..50}; do
-    [[ -s $SHOT ]] && break
-    sleep 0.1
-done
-[[ -s $SHOT ]] || {
-    echo "screenshot: niri did not write $SHOT" >&2
-    exit 1
-}
-
-if [[ ${1:-} == --local ]]; then
-    echo "$SHOT"
-    exit 0
-fi
-
-# Single orphan commit, force-pushed, so the branch never accumulates old images.
-blob=$(git hash-object -w "$SHOT")
-tree=$(printf '100644 blob %s\tscreenshot.png\n' "$blob" | git mktree)
-commit=$(git commit-tree "$tree" -m "chore: update screenshot")
-git push --no-verify --force --quiet origin "$commit:refs/heads/screenshots"
+sleep 3
+mkdir -p "$(dirname "$SHOT")"
 rm -f "$SHOT"
-echo "screenshot: published to the screenshots branch"
+niri msg action screenshot-screen --show-pointer false --path "$SHOT"
+[[ -s $SHOT ]]
+echo "$SHOT"

@@ -55,9 +55,9 @@ To add a package, put it in the right list in `packages.yaml`. Use `pacman`, `pa
 
 ## Screenshot
 
-The image above lives on the `screenshots` branch. To refresh it, push with `SCREENSHOT=1 git push`
-or run `scripts/screenshot.sh`. It opens a demo workspace (nvim, fastfetch, btop) on `DP-1`,
-screenshots it, closes everything and force-pushes the image. Use `--local` to only save it.
+The image above lives on the `screenshots` branch. Run `scripts/screenshot.sh` to open a demo
+workspace (nvim, fastfetch, btop) on `DP-1`, capture it and print the file path. Once you are happy
+with it, `scripts/screenshot.sh --publish` force-pushes that image to the branch.
 
 ## Secrets
 
