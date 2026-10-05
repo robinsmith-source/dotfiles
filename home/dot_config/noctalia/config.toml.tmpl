@@ -3,7 +3,7 @@ capsule = false
 capsule_radius = 0
 center = [ "taskbar" ]
 concave_edge_corners = false
-end = [ "media", "tray", "group:g4", "group:g2", "volume", "session" ]
+end = [ "media", "tray", "group:g4", "group:g2", "volume",{{ if .laptop }} "group:g5",{{ end }} "session" ]
 font_family = "JetBrainsMono NF"
 margin_ends = 0
 radius = 0
@@ -86,6 +86,18 @@ start = [ "clock", "group:g1", "group:g3" ]
     members = [ "notifications", "clipboard" ]
     opacity = 1.0
     padding = 6.0
+{{- if .laptop }}
+
+    [[bar.default.capsule_group]]
+    accordion = false
+    accordion_direction = "end"
+    enabled = true
+    fill = "surface_variant"
+    id = "g5"
+    members = [ "battery" ]
+    opacity = 1.0
+    padding = 6.0
+{{- end }}
 
     [[bar.default.capsule_group]]
     accordion = true
