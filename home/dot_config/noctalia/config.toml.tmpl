@@ -1,11 +1,12 @@
 [bar.default]
 capsule = false
-capsule_radius = 0
+capsule_radius = 4
 center = [ "taskbar" ]
 concave_edge_corners = false
 end = [ "media", "tray", "group:g4", "group:g2", "volume",{{ if .laptop }} "group:g5",{{ end }} "session" ]
 font_family = "JetBrainsMono NF"
-margin_ends = 0
+margin_ends = 4
+padding = 0
 radius = 0
 start = [ "clock", "group:g1", "group:g3" ]
 
@@ -59,6 +60,7 @@ start = [ "clock", "group:g1", "group:g3" ]
     [[bar.default.capsule_group]]
     accordion = false
     accordion_direction = "end"
+    border_width = 1.0
     enabled = true
     fill = "surface_variant"
     id = "g2"
@@ -69,17 +71,29 @@ start = [ "clock", "group:g1", "group:g3" ]
     [[bar.default.capsule_group]]
     accordion = false
     accordion_direction = "end"
+    border_width = 1.0
     enabled = true
     fill = "surface_variant"
     id = "g3"
     members = [ "cpu", "ram", "sysmon" ]
     opacity = 1.0
     padding = 6.0
-    radius = 0.0
+
+    [[bar.default.capsule_group]]
+    accordion = true
+    accordion_direction = "end"
+    border_width = 1.0
+    enabled = true
+    fill = "surface_variant"
+    id = "g1"
+    members = [ "wallpaper", "wallhaven" ]
+    opacity = 1.0
+    padding = 6.0
 
     [[bar.default.capsule_group]]
     accordion = false
     accordion_direction = "end"
+    border_width = 1.0
     enabled = true
     fill = "surface_variant"
     id = "g4"
@@ -91,6 +105,7 @@ start = [ "clock", "group:g1", "group:g3" ]
     [[bar.default.capsule_group]]
     accordion = false
     accordion_direction = "end"
+    border_width = 1.0
     enabled = true
     fill = "surface_variant"
     id = "g5"
@@ -98,17 +113,6 @@ start = [ "clock", "group:g1", "group:g3" ]
     opacity = 1.0
     padding = 6.0
 {{- end }}
-
-    [[bar.default.capsule_group]]
-    accordion = true
-    accordion_direction = "end"
-    enabled = true
-    fill = "surface_variant"
-    id = "g1"
-    members = [ "wallpaper", "wallhaven" ]
-    opacity = 1.0
-    padding = 6.0
-    radius = 0.0
 
 [calendar]
 enabled = true
@@ -146,7 +150,12 @@ hidden_tabs = [ "monitor", "power" ]
 {{- if not .laptop }}
 [desktop_widgets]
 schema_version = 2
-widget_order = [ "desktop-widget-0000000000000001", "desktop-widget-0000000000000002", "desktop-widget-0000000000000003" ]
+widget_order = [
+    "desktop-widget-0000000000000001",
+    "desktop-widget-0000000000000002",
+    "desktop-widget-0000000000000003",
+    "desktop-widget-0000000000000004"
+]
 
     [desktop_widgets.grid]
     cell_size = 16
@@ -201,14 +210,34 @@ widget_order = [ "desktop-widget-0000000000000001", "desktop-widget-000000000000
 
         [desktop_widgets.widget.desktop-widget-0000000000000003.settings]
         background = false
+
+    [desktop_widgets.widget.desktop-widget-0000000000000004]
+    box_height = 160.0
+    box_width = 784.0
+    cx = 1720.0
+    cy = 112.0
+    flip_y = true
+    output = "DP-1"
+    placement_height = 1440.0
+    placement_width = 3440.0
+    rotation = 0.0
+    type = "audio_visualizer"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000004.settings]
+        background = false
+        bands = 16
+        centered = false
+        mirrored = true
+        reversed = false
+        show_when_idle = false
 {{- end }}
 
 [dock]
 concave_edge_corners = false
 enabled = true
 icon_size = 36
-pinned = [ "spotify-launcher", "discord", "zen", "dev.zed.Zed" ]
-radius = 0
+pinned = [ "zen", "dev.zed.Zed", "spotify-launcher", "discord" ]
+radius = 8
 reserve_space = false
 shadow = false
 show_dots = true
@@ -391,6 +420,9 @@ download_dir = "{{ .chezmoi.homeDir }}/Pictures/Wallpaper"
 [plugin_settings."raycursive/niri-displays"]
 scale_presets = [ "2560x1440=1", "3840x2160=1.5" ]
 
+[plugin_settings."robin/keyboard_color_sync"]
+hue_shift = 105
+
 [plugins]
 auto_update = "official"
 enabled = [ "noctalia/bitwarden", "noctalia/wallhaven" ]
@@ -411,7 +443,7 @@ enabled = [ "noctalia/bitwarden", "noctalia/wallhaven" ]
     name = "local"
 
 [shell]
-corner_radius_scale = 0.0
+corner_radius_scale = 0.5
 font_family = "JetBrainsMono NF"
 niri_overview_type_to_launch_enabled = true
 polkit_agent = true
@@ -497,6 +529,7 @@ width = 180
     left = "panel-toggle control-center audio"
 
 [widget.clock]
+anchor = false
 capsule = true
 format = "{:%H:%M:%S}"
 
