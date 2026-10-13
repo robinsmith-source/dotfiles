@@ -18,6 +18,9 @@
     "dock": "left"
   },
   "agent": {
+    "threads_sidebar": {
+      "position": "right"
+    },
     "dock": "right",
     "favorite_models": [],
     "model_parameters": []
