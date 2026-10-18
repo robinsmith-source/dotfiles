@@ -26,7 +26,7 @@
     "model_parameters": []
   },
   "git_panel": {
-    "dock": "right"
+    "dock": "left"
   },
   "agent_servers": {
     "claude-acp": {
