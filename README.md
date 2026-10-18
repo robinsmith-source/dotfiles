@@ -81,6 +81,7 @@ gitleaks blocks commits that look like they contain a secret, just in case.
 
 - **pre-commit** (local + CI): gitleaks, shellcheck, shfmt, stylua, YAML/TOML/JSON sanity
 - **CI** also runs gitleaks + trufflehog over the full history, luacheck, and a clean
-  `chezmoi apply` in an Arch container that validates niri, umbriel, noctalia, fish, the rendered
-  install script and all package names
+  `chezmoi apply` in an Arch container that validates niri, noctalia, fish, the rendered
+  install script and all package names; a second job validates the umbriel config in a
+  CachyOS container
 - **Renovate** bumps pre-commit hooks and GitHub Actions weekly
