@@ -1,0 +1,72 @@
+[[window_rule]]
+blur = true
+blur_optimized = false
+
+[[window_rule]]
+match.app_id = "^dev.noctalia.Noctalia$"
+default_floating = true
+default_floating_size_px = { width = 1080, height = 920 }
+
+[[window_rule]]
+match.app_id = "^dev.noctalia.UmbrielSharePicker$"
+default_floating = true
+default_floating_size_px = { width = 800, height = 600 }
+
+[[window_rule]]
+match.title = "^(Picture-in-Picture|Picture in picture)$"
+default_floating = true
+default_maximize = false
+default_position = { x = 20, y = 20, anchor = "bottom_right" }
+
+# Steam floats except its main window.
+[[window_rule]]
+match.app_id = "^steam$"
+default_floating = true
+
+[[window_rule]]
+match.app_id = "^steam$"
+match.title = "^[Ss]team$"
+default_floating = false
+
+[[window_rule]]
+match.app_id = "^steam$"
+match.title = "^notificationtoasts_\\d+_desktop$"
+default_position = { x = 10, y = 10, anchor = "bottom_right" }
+default_focused = false
+default_pinned = true
+
+[[window_rule]]
+match.app_id = "obsidian"
+default_maximize = true
+
+[[window_rule]]
+match.app_id = ["zen$", "firefox$", "chrome$"]
+match.is_alone = true
+default_scrolling_extent = 1.0
+
+[[window_rule]]
+match.app_id = ["zen$", "firefox$", "chrome$"]
+match.is_alone = false
+default_scrolling_extent = 0.5
+
+[[window_rule]]
+match.app_id = "^[Aa]lacritty$"
+default_output = "DP-1"
+
+[[window_rule]]
+match.app_id = "^discord$"
+default_output = "DP-2"
+
+[[window_rule]]
+match.app_id = "^Spotify$"
+default_output = "DP-2"
+
+[[window_rule]]
+match.app_id = "^discord$"
+match.is_alone = false
+default_scrolling_extent = 0.75
+
+[[window_rule]]
+match.app_id = "^Spotify$"
+match.is_alone = false
+default_scrolling_extent = 0.25
