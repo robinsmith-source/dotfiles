@@ -1,6 +1,6 @@
 # dotfiles
 
-CachyOS + [Niri](https://github.com/YaLTeR/niri) + [Noctalia](https://docs.noctalia.dev), managed with [chezmoi](https://www.chezmoi.io).
+CachyOS + [Niri](https://github.com/YaLTeR/niri) or [Umbriel](https://github.com/noctalia-dev/umbriel) + [Noctalia](https://docs.noctalia.dev), managed with [chezmoi](https://www.chezmoi.io).
 
 ![desktop](https://raw.githubusercontent.com/robinsmith-source/dotfiles/screenshots/screenshot.png)
 
@@ -9,13 +9,14 @@ CachyOS + [Niri](https://github.com/YaLTeR/niri) + [Noctalia](https://docs.nocta
 | Config | Notes |
 | --- | --- |
 | [niri](home/dot_config/niri) | Split into `cfg/*.kdl`; outputs and input are templated per machine |
+| [umbriel](home/dot_config/umbriel) | Alternative compositor, installed alongside niri (CachyOS only). Split into `cfg/*.toml`; outputs and input are templated per machine. Pick it from the login screen; `umbriel config validate` checks it |
 | [noctalia](home/dot_config/noctalia) | Bar, widgets, wallpaper; generates the Neovim colorscheme via matugen |
 | [nvim](home/dot_config/nvim) | LazyVim + base16, themed from the current wallpaper |
 | [fish](home/dot_config/fish) | On top of the CachyOS fish config |
 | [alacritty](home/dot_config/alacritty), [zed](home/dot_config/zed), [btop](home/dot_config/btop), [fastfetch](home/dot_config/fastfetch) | |
 | [git](home/dot_gitconfig.tmpl) | SSH-signed commits via the Bitwarden SSH agent |
 
-Press `Mod+Shift+Esc` in niri for the full keybind overlay.
+Press `Mod+Shift+Esc` in niri or umbriel for the full keybind overlay.
 
 ## Install
 
@@ -80,6 +81,6 @@ gitleaks blocks commits that look like they contain a secret, just in case.
 
 - **pre-commit** (local + CI): gitleaks, shellcheck, shfmt, stylua, YAML/TOML/JSON sanity
 - **CI** also runs gitleaks + trufflehog over the full history, luacheck, and a clean
-  `chezmoi apply` in an Arch container that validates niri, noctalia, fish, the rendered
+  `chezmoi apply` in an Arch container that validates niri, umbriel, noctalia, fish, the rendered
   install script and all package names
 - **Renovate** bumps pre-commit hooks and GitHub Actions weekly
