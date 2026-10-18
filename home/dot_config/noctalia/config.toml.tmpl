@@ -1,5 +1,5 @@
 [bar.default]
-capsule = false
+capsule = true
 capsule_radius = 4
 center = [ "taskbar" ]
 concave_edge_corners = false
@@ -530,7 +530,6 @@ width = 180
 
 [widget.clock]
 anchor = false
-capsule = true
 format = "{:%H:%M:%S}"
 
     [widget.clock.actions]
@@ -541,7 +540,6 @@ format = "{:%H:%M:%S}"
 visualization = "graph"
 
 [widget.media]
-capsule = true
 enabled = true
 hide_when_no_media = true
 title_scroll = "on_hover"
@@ -554,18 +552,13 @@ vpn_status = "both"
 [widget.ram]
 visualization = "graph"
 
-[widget.session]
-capsule = true
-
 [widget.sysmon]
 stat = "gpu_usage"
 visualization = "graph"
 
 [widget.taskbar]
 anchor = true
-capsule_opacity = 0.0
-capsule_padding = 0
-capsule_radius = "auto"
+capsule = false
 group_by_workspace = true
 hide_empty_workspaces = true
 icon_scale = 2.0
@@ -577,11 +570,7 @@ show_window_title = false
 workspace_label_placement = "inside"
 
 [widget.tray]
-capsule = true
 detached_panel = true
-
-[widget.volume]
-capsule = true
 
 [widget.wallhaven]
 type = "noctalia/wallhaven:wallhaven"
