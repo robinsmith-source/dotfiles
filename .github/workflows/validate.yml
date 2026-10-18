@@ -27,6 +27,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   lint:
+    needs: secret-scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -35,30 +36,33 @@ jobs:
       # shellcheck, shfmt, stylua, gitleaks and file sanity checks
       - run: pipx run pre-commit run --all-files --show-diff-on-failure
 
-  arch:
+  validate:
+    name: validate (${{ matrix.name }})
+    needs: lint
     runs-on: ubuntu-latest
-    container: archlinux:latest
+    container: ${{ matrix.image }}
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - name: arch
+            image: archlinux:latest
+          - name: cachyos
+            image: cachyos/cachyos:latest
+            extra_packages: umbriel
     steps:
       - uses: actions/checkout@v7
-      - run: pacman -Syu --noconfirm niri noctalia fish chezmoi sudo shellcheck
+      - run: pacman -Syu --noconfirm niri noctalia fish chezmoi sudo shellcheck ${{ matrix.extra_packages }}
       # Check out to the canonical chezmoi source path so hooks/scripts that
       # assume it (e.g. the Bitwarden install hook) resolve correctly.
       - run: mkdir -p ~/.local/share && cp -r "$GITHUB_WORKSPACE" ~/.local/share/chezmoi
       - run: chezmoi init --apply --promptDefaults --exclude=scripts
       - run: niri validate
       - run: noctalia config validate
+      - if: matrix.name == 'cachyos'
+        run: umbriel config validate
       - run: find ~/.config/fish -name '*.fish' | xargs -I{} fish --no-execute {}
       # pre-commit skips .tmpl files, so lint the rendered install script here
       - run: chezmoi execute-template < home/run_onchange_install-packages.sh.tmpl | shellcheck -s bash -
       # catch typos/renamed packages (CachyOS-only and AUR lists aren't resolvable here)
       - run: chezmoi execute-template '{{ range concat .packages.pacman .packages.pacman_laptop }}{{ . }} {{ end }}' | xargs pacman -Si > /dev/null
-
-  umbriel:
-    runs-on: ubuntu-latest
-    container: cachyos/cachyos:latest
-    steps:
-      - uses: actions/checkout@v7
-      - run: pacman -Syu --noconfirm umbriel chezmoi sudo
-      - run: mkdir -p ~/.local/share && cp -r "$GITHUB_WORKSPACE" ~/.local/share/chezmoi
-      - run: chezmoi init --apply --promptDefaults --exclude=scripts
-      - run: umbriel config validate
