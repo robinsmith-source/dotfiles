@@ -486,7 +486,8 @@ screen_time_enabled = true
 
     [shell.screenshot]
     confirm_region = true
-    remember_last_region = true
+    directory = "{{ .chezmoi.homeDir }}/Pictures/Screenshots"
+    remember_last_region = false
 
     [shell.session]
     grid = true
