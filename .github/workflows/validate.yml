@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   secret-scan:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
         with:
@@ -28,7 +28,7 @@ jobs:
 
   lint:
     needs: secret-scan
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
       - run: sudo apt-get install -y --no-install-recommends lua-check
@@ -39,7 +39,7 @@ jobs:
   validate:
     name: validate (${{ matrix.name }})
     needs: lint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     container: ${{ matrix.image }}
     strategy:
       fail-fast: true
