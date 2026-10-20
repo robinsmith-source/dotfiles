@@ -2,6 +2,8 @@ layout {
   gaps 8 // Gap between windows
   center-focused-column "never" // Don’t auto-center focused column
 
+  default-column-width { proportion 0.5; } // New windows open at half the output
+
   background-color "transparent" // <- needed for noctalia-shell to set wallpaper
 
 	preset-column-widths {
