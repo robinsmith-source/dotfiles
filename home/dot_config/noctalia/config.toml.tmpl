@@ -1,12 +1,13 @@
 [bar.default]
 capsule = true
 capsule_radius = 4
+capsule_thickness = 0.8
 center = [ "taskbar" ]
 concave_edge_corners = false
 end = [ "media", "tray", "group:g4", "group:g2", "volume",{{ if .laptop }} "group:g5",{{ end }} "session" ]
 font_family = "JetBrainsMono NF"
 margin_ends = 0
-padding = 0
+padding = 4
 radius = 0
 start = [ "clock", "group:g1", "group:g3" ]
 
@@ -121,6 +122,9 @@ enabled = true
     name = "Personal Calendar"
     type = "google"
 
+    [calendar.reminders]
+    all_day_digest_time = ""
+
 [control_center]
 {{- if .laptop }}
 hidden_tabs = [ ]
@@ -152,9 +156,9 @@ hidden_tabs = [ "monitor", "power" ]
 schema_version = 2
 widget_order = [
     "desktop-widget-0000000000000001",
-    "desktop-widget-0000000000000002",
     "desktop-widget-0000000000000003",
-    "desktop-widget-0000000000000004"
+    "desktop-widget-0000000000000004",
+    "desktop-widget-0000000000000005"
 ]
 
     [desktop_widgets.grid]
@@ -163,10 +167,10 @@ widget_order = [
     visible = false
 
     [desktop_widgets.widget.desktop-widget-0000000000000001]
-    box_height = 240.0
-    box_width = 576.0
+    box_height = 192.0
+    box_width = 512.0
     cx = 3128.0
-    cy = 1296.0
+    cy = 1265.0
     output = "DP-1"
     placement_height = 1440.0
     placement_width = 3440.0
@@ -181,27 +185,11 @@ widget_order = [
         font_family = "JetBrainsMono NF"
         shadow = true
 
-    [desktop_widgets.widget.desktop-widget-0000000000000002]
-    box_height = 112.0
-    box_width = 288.0
-    cx = 184.0
-    cy = 136.0
-    output = "DP-1"
-    placement_height = 1440.0
-    placement_width = 3440.0
-    rotation = 0.0
-    type = "weather"
-
-        [desktop_widgets.widget.desktop-widget-0000000000000002.settings]
-        background = false
-        shadow = true
-        show_forecast = false
-
     [desktop_widgets.widget.desktop-widget-0000000000000003]
     box_height = 210.5
     box_width = 489.0
-    cx = 1163.5001220703125
-    cy = 2429.25
+    cx = 1162.5
+    cy = 2374.25
     output = "DP-2"
     placement_height = 2560.0
     placement_width = 1440.0
@@ -230,16 +218,35 @@ widget_order = [
         mirrored = true
         reversed = false
         show_when_idle = false
+
+    [desktop_widgets.widget.desktop-widget-0000000000000005]
+    box_height = 192.0
+    box_width = 512.0
+    cx = 312.0
+    cy = 1265.0
+    output = "DP-1"
+    placement_height = 1440.0
+    placement_width = 3440.0
+    rotation = 0.0
+    type = "media_player"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000005.settings]
+        background = false
+        layout = "horizontal"
+        shadow = false
 {{- end }}
 
 [dock]
+background_opacity = 1.0
 concave_edge_corners = false
 enabled = true
-icon_size = 36
-pinned = [ "zen", "dev.zed.Zed", "spotify-launcher", "discord" ]
-radius = 8
+icon_size = 42
+pinned = [ "zen", "Alacritty", "dev.zed.Zed", "org.gnome.Nautilus", "obsidian", "spotify-launcher", "discord", "bitwarden" ]
+radius = 0
+radius_top_left = 8
+radius_top_right = 8
 reserve_space = false
-shadow = false
+shadow = true
 show_dots = true
 smart_auto_hide = true
 
@@ -303,6 +310,7 @@ widget_order = [
         show_keyboard_layout = true
         show_login_button = true
         show_media = true
+        show_password_reveal = true
         show_session_buttons = true
         show_unlock_hint = false
         show_weather = true
@@ -330,6 +338,7 @@ widget_order = [
         show_keyboard_layout = true
         show_login_button = true
         show_media = true
+        show_password_reveal = true
         show_session_buttons = true
         show_unlock_hint = false
         show_weather = true
@@ -357,6 +366,7 @@ widget_order = [
         show_keyboard_layout = true
         show_login_button = true
         show_media = true
+        show_password_reveal = true
         show_session_buttons = true
         show_unlock_hint = true
         show_weather = true
@@ -384,10 +394,14 @@ widget_order = [
         show_keyboard_layout = true
         show_login_button = true
         show_media = true
+        show_password_reveal = true
         show_session_buttons = true
         show_unlock_hint = true
         show_weather = true
 {{- end }}
+
+[nightlight]
+temperature_night = 6400
 
 [notification]
 filter_order = [ "filter" ]
@@ -416,6 +430,10 @@ compositor = "niri"
 
 [plugin_settings."noctalia/wallhaven"]
 download_dir = "{{ .chezmoi.homeDir }}/Pictures/Wallpaper"
+
+[plugin_settings."noctalia/wallpaper_depth"]
+feather = 15
+threshold = 55
 
 [plugin_settings."raycursive/niri-displays"]
 scale_presets = [ "2560x1440=1", "3840x2160=1.5" ]
@@ -450,16 +468,30 @@ polkit_agent = true
 screen_time_enabled = true
 
     [shell.launcher]
-    app_grid = true
+    app_grid = false
+    pinned = [ "dev.zed.Zed", "bitwarden", "discord", "spotify-launcher" ]
 
     [shell.panel]
     clipboard_placement = "attached"
     open_near_click_clipboard = true
     open_near_click_control_center = true
-    open_near_click_launcher = true
+    open_near_click_launcher = false
     open_near_click_session = true
     open_near_click_wallpaper = true
     transparency_mode = "solid"
+
+    [shell.screen_corners]
+    enabled = true
+    size = 8
+
+    [shell.screenshot]
+    confirm_region = true
+    directory = "{{ .chezmoi.homeDir }}/Pictures/Screenshots"
+    remember_last_region = false
+
+    [shell.session]
+    grid = true
+    show_shortcuts = false
 
 [theme]
 builtin = "Kanagawa"
@@ -469,11 +501,10 @@ source = "community"
 wallpaper_scheme = "m3-tonal-spot"
 
     [theme.templates]
-    builtin_ids = [ "alacritty", "btop", "gtk3", "gtk4", "niri", "qt", "starship" ]
+    builtin_ids = [ "alacritty", "btop", "cava", "gtk3", "gtk4", "niri", "qt", "starship" ]
     community_ids = [
         "claude-code",
         "opencode",
-        "pywalfox-beta4",
         "zen-browser",
         "neovim",
         "obsidian",
@@ -483,10 +514,13 @@ wallpaper_scheme = "m3-tonal-spot"
         "steam",
         "fastfetch",
         "obs",
+        "thunderbird",
+        "papirus-icons",
         "bat",
         "fzf",
         "herdr",
-        "lazygit"
+        "lazygit",
+        "yazi"
     ]
 
         [theme.templates.user.nvim-base16]
@@ -496,6 +530,8 @@ wallpaper_scheme = "m3-tonal-spot"
 
 [wallpaper]
 directory = "{{ .chezmoi.homeDir }}/Pictures/Wallpaper"
+transition = [ "disc", "fade", "stripes", "wipe", "zoom" ]
+transition_on_startup = true
 
     [wallpaper.default]
     path = "{{ .chezmoi.homeDir }}/Pictures/Wallpaper/wallhaven-2yg1lg.png"
@@ -517,6 +553,12 @@ directory = "{{ .chezmoi.homeDir }}/Pictures/Wallpaper"
     path = "{{ .chezmoi.homeDir }}/Pictures/Wallpaper/wallhaven-2yg1lg.png"
     theme_mode = "auto"
 
+    [[wallpaper.favorite]]
+    community_palette = "Oxocarbon"
+    palette_source = "community"
+    path = "{{ .chezmoi.homeDir }}/Pictures/Wallpaper/wallhaven-d6eylg.jpg"
+    theme_mode = "dark"
+
 [weather]
 refresh_minutes = 120
 
@@ -527,6 +569,9 @@ width = 180
 
     [widget.audio_visualizer.actions]
     left = "panel-toggle control-center audio"
+
+[widget.battery]
+display_mode = "graphic"
 
 [widget.clock]
 anchor = false
