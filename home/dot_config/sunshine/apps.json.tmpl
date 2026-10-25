@@ -1,0 +1,35 @@
+{
+    "env": {
+        "PATH": "$(PATH):$(HOME)/.local/bin"
+    },
+    "apps": [
+        {
+            "name": "Desktop",
+            "image-path": "desktop.png"
+        },
+        {
+            "name": "Steam Big Picture",
+            "detached": [
+                "steam steam://open/bigpicture"
+            ],
+            "prep-cmd": [
+                {
+                    "do": "",
+                    "undo": "steam steam://close/bigpicture"
+                }
+            ],
+            "image-path": "steam.png"
+        },
+        {
+            "name": "Mirror DP-1 (16:9)",
+            "prep-cmd": [
+                {
+                    "do": "{{ .chezmoi.homeDir }}/.config/sunshine/mirror-output.sh prepare",
+                    "undo": "{{ .chezmoi.homeDir }}/.config/sunshine/mirror-output.sh restore"
+                }
+            ],
+            "image-path": "desktop-alt.png",
+            "exclude-global-prep-cmd": true
+        }
+    ]
+}
