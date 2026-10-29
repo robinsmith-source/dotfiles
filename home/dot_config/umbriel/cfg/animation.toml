@@ -1,0 +1,25 @@
+[animation]
+duration_ms = 150
+curve = "snappy"
+
+[animation.windows_in]
+duration_ms = 150
+curve = "easeout"
+style = "popin"
+scale = 0.9
+
+[animation.windows_out]
+duration_ms = 120
+curve = "easeout"
+style = "popin"
+scale = 0.9
+
+[animation.windows_move]
+curve = "spring:1,800"
+
+[animation.workspaces]
+curve = "spring:1,1000"
+
+[animation.overview]
+curve = "spring:1,900"
+workspace_curve = "spring:1,900"

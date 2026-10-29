@@ -1,0 +1,10 @@
+[appearance]
+prefer_no_csd = true
+corner_radius = 0
+
+[appearance.blur]
+enabled = true
+passes = 2
+radius = 3
+noise = 0.03
+saturation = 1.0

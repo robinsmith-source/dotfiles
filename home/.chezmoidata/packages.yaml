@@ -85,6 +85,10 @@ packages:
   pacman_cachyos:
     - cachyos-niri-noctalia
     - cachyos-alacritty-config
+
+    - umbriel
+    - xdg-desktop-portal-umbriel
+
     - zen-browser-bin
     - claude-code
     - yay

@@ -1,0 +1,30 @@
+onboarding = false
+
+[ui]
+show_agent_labels_on_pane_borders = false
+
+agent_panel_sort = "priority"
+[theme]
+name = "terminal"
+auto_switch = false
+
+[theme.custom]
+accent = "#ffb4a3"
+panel_bg = "reset"
+sidebar_bg = "reset"
+active_row_bg = "#2a2a2a"
+selection_bg = "#353535"
+surface0 = "#2a2a2a"
+surface1 = "#353535"
+surface_dim = "#131313"
+overlay0 = "#919191"
+overlay1 = "#c6c6c6"
+text = "#e2e2e2"
+subtext0 = "#c6c6c6"
+mauve = "#ffb4a3"
+green = "#ffb4a3"
+yellow = "#e7bdb3"
+red = "#ffb4ab"
+blue = "#dac58c"
+teal = "#e7bdb3"
+peach = "#ffdeab"

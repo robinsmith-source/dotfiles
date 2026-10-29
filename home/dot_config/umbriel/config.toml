@@ -1,0 +1,15 @@
+[include]
+files = [
+  "cfg/general.toml",
+  "cfg/outputs.toml",
+  "cfg/input.toml",
+  "cfg/appearance.toml",
+  "cfg/layout.toml",
+  "cfg/animation.toml",
+  "cfg/keybinds.toml",
+  "cfg/window-rules.toml",
+  "cfg/layer-rules.toml",
+]
+
+[include.optional]
+files = ["noctalia.toml"]

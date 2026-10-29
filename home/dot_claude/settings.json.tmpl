@@ -1,0 +1,37 @@
+{
+  "model": "opus",
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "includeCoAuthoredBy": false,
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '{{ .chezmoi.homeDir }}/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "vibe-wise@vibe-wise": true
+  },
+  "extraKnownMarketplaces": {
+    "vibe-wise": {
+      "source": {
+        "source": "github",
+        "repo": "nykooi1/vibe-wise"
+      }
+    }
+  },
+  "tui": "fullscreen",
+  "theme": "auto",
+  "switchModelsOnFlag": true,
+  "inputNeededNotifEnabled": true
+}
