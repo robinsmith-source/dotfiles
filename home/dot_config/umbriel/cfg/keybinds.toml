@@ -1,30 +1,30 @@
 [keybinds]
 
-"Mod+Shift+Return" = "spawn:noctalia msg panel-toggle wallpaper"
-"Mod+S" = "spawn:noctalia msg panel-toggle control-center"
-"Mod+Shift+S" = "spawn:noctalia msg settings-toggle"
-"Mod+Ctrl+Return" = "spawn:noctalia msg panel-toggle launcher"
-"Mod+Alt+L" = "spawn:noctalia msg session lock"
-"Mod+Shift+Q" = "spawn:noctalia msg panel-toggle session"
+"Mod+Shift+Return" = "spawn noctalia msg panel-toggle wallpaper"
+"Mod+S" = "spawn noctalia msg panel-toggle control-center"
+"Mod+Shift+S" = "spawn noctalia msg settings-toggle"
+"Mod+Ctrl+Return" = "spawn noctalia msg panel-toggle launcher"
+"Mod+Alt+L" = "spawn noctalia msg session lock"
+"Mod+Shift+Q" = "spawn noctalia msg panel-toggle session"
 
-"Mod+Return" = { action = "spawn:alacritty", repeat = false }
-"Mod+B" = { action = "spawn:zen-browser", repeat = false }
-"Mod+E" = { action = "spawn:nautilus", repeat = false }
-"Mod+P" = { action = "spawn:alacritty -e btop", repeat = false }
-"Mod+V" = { action = "spawn:code", repeat = false }
-"Mod+N" = { action = "spawn:nvim", repeat = false }
-"Mod+Z" = { action = "spawn:zed", repeat = false }
+"Mod+Return" = { action = "spawn alacritty", repeat = false }
+"Mod+B" = { action = "spawn zen-browser", repeat = false }
+"Mod+E" = { action = "spawn nautilus", repeat = false }
+"Mod+P" = { action = "spawn alacritty -e btop", repeat = false }
+"Mod+V" = { action = "spawn code", repeat = false }
+"Mod+N" = { action = "spawn nvim", repeat = false }
+"Mod+Z" = { action = "spawn zed", repeat = false }
 
-"XF86AudioRaiseVolume" = { action = "spawn:noctalia msg volume-up", allow_when_locked = true }
-"XF86AudioLowerVolume" = { action = "spawn:noctalia msg volume-down", allow_when_locked = true }
-"XF86AudioMute" = { action = "spawn:noctalia msg volume-mute", allow_when_locked = true, repeat = false }
-"XF86AudioMicMute" = { action = "spawn:noctalia msg mic-mute", allow_when_locked = true, repeat = false }
-"XF86AudioNext" = { action = "spawn:noctalia msg media next", allow_when_locked = true }
-"XF86AudioPrev" = { action = "spawn:noctalia msg media previous", allow_when_locked = true }
-"XF86AudioPlay" = { action = "spawn:noctalia msg media toggle", allow_when_locked = true, repeat = false }
-"XF86AudioPause" = { action = "spawn:noctalia msg media stop", allow_when_locked = true, repeat = false }
-"XF86MonBrightnessUp" = { action = "spawn:noctalia msg brightness-up", allow_when_locked = true }
-"XF86MonBrightnessDown" = { action = "spawn:noctalia msg brightness-down", allow_when_locked = true }
+"XF86AudioRaiseVolume" = { action = "spawn noctalia msg volume-up", allow_when_locked = true }
+"XF86AudioLowerVolume" = { action = "spawn noctalia msg volume-down", allow_when_locked = true }
+"XF86AudioMute" = { action = "spawn noctalia msg volume-mute", allow_when_locked = true, repeat = false }
+"XF86AudioMicMute" = { action = "spawn noctalia msg mic-mute", allow_when_locked = true, repeat = false }
+"XF86AudioNext" = { action = "spawn noctalia msg media next", allow_when_locked = true }
+"XF86AudioPrev" = { action = "spawn noctalia msg media previous", allow_when_locked = true }
+"XF86AudioPlay" = { action = "spawn noctalia msg media toggle", allow_when_locked = true, repeat = false }
+"XF86AudioPause" = { action = "spawn noctalia msg media stop", allow_when_locked = true, repeat = false }
+"XF86MonBrightnessUp" = { action = "spawn noctalia msg brightness-up", allow_when_locked = true }
+"XF86MonBrightnessDown" = { action = "spawn noctalia msg brightness-down", allow_when_locked = true }
 
 "Mod+Q" = { action = "window-close", repeat = false }
 
@@ -94,32 +94,32 @@
 "Mod+Ctrl+Shift+WheelDown" = "column-move-right"
 "Mod+Ctrl+Shift+WheelUp" = "column-move-left"
 
-"Mod+1" = "workspace-switch:1"
-"Mod+2" = "workspace-switch:2"
-"Mod+3" = "workspace-switch:3"
-"Mod+4" = "workspace-switch:4"
-"Mod+5" = "workspace-switch:5"
-"Mod+6" = "workspace-switch:6"
-"Mod+7" = "workspace-switch:7"
-"Mod+8" = "workspace-switch:8"
-"Mod+9" = "workspace-switch:9"
-"Mod+Shift+1" = "column-move-to-workspace:1"
-"Mod+Shift+2" = "column-move-to-workspace:2"
-"Mod+Shift+3" = "column-move-to-workspace:3"
-"Mod+Shift+4" = "column-move-to-workspace:4"
-"Mod+Shift+5" = "column-move-to-workspace:5"
-"Mod+Shift+6" = "column-move-to-workspace:6"
-"Mod+Shift+7" = "column-move-to-workspace:7"
-"Mod+Shift+8" = "column-move-to-workspace:8"
-"Mod+Shift+9" = "column-move-to-workspace:9"
+"Mod+1" = "workspace-switch 1"
+"Mod+2" = "workspace-switch 2"
+"Mod+3" = "workspace-switch 3"
+"Mod+4" = "workspace-switch 4"
+"Mod+5" = "workspace-switch 5"
+"Mod+6" = "workspace-switch 6"
+"Mod+7" = "workspace-switch 7"
+"Mod+8" = "workspace-switch 8"
+"Mod+9" = "workspace-switch 9"
+"Mod+Shift+1" = "column-move-to-workspace 1"
+"Mod+Shift+2" = "column-move-to-workspace 2"
+"Mod+Shift+3" = "column-move-to-workspace 3"
+"Mod+Shift+4" = "column-move-to-workspace 4"
+"Mod+Shift+5" = "column-move-to-workspace 5"
+"Mod+Shift+6" = "column-move-to-workspace 6"
+"Mod+Shift+7" = "column-move-to-workspace 7"
+"Mod+Shift+8" = "column-move-to-workspace 8"
+"Mod+Shift+9" = "column-move-to-workspace 9"
 "Mod+Tab" = "workspace-focus-last"
 
 "Mod+Ctrl+F" = { action = "window-toggle-maximize", repeat = false }
 "Mod+C" = "column-center"
-"Mod+Minus" = "window-modify-primary-extent:-0.1"
-"Mod+Equal" = "window-modify-primary-extent:0.1"
-"Mod+Shift+Minus" = "window-modify-secondary-extent:-0.1"
-"Mod+Shift+Equal" = "window-modify-secondary-extent:0.1"
+"Mod+Minus" = "window-modify-primary-extent -0.1"
+"Mod+Equal" = "window-modify-primary-extent 0.1"
+"Mod+Shift+Minus" = "window-modify-secondary-extent -0.1"
+"Mod+Shift+Equal" = "window-modify-secondary-extent 0.1"
 
 "Mod+T" = { action = "window-toggle-floating", repeat = false }
 "Mod+F" = { action = "window-toggle-maximize", repeat = false }
@@ -127,7 +127,7 @@
 "Mod+W" = { action = "column-toggle-tabbed", repeat = false }
 "Mod+M" = { action = "window-toggle-maximize-to-edges", repeat = false }
 
-"Ctrl+Shift+1" = { action = "spawn:noctalia msg screenshot-region", repeat = false }
+"Ctrl+Shift+1" = { action = "spawn noctalia msg screenshot-region", repeat = false }
 
 "Mod+Shift+Escape" = { action = "cheatsheet-toggle", repeat = false }
 "Mod+Escape" = { action = "shortcuts-inhibit-toggle", allow_when_inhibited = true, repeat = false }
