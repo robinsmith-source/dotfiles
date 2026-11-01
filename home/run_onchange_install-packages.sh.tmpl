@@ -11,6 +11,11 @@ PACMAN_PKGS=(
     {{ . | quote }}
 {{- end }}
 {{- end }}
+{{- if not .laptop }}
+{{- range .packages.pacman_desktop }}
+    {{ . | quote }}
+{{- end }}
+{{- end }}
 {{- if eq .chezmoi.osRelease.id "cachyos" }}
 {{- range .packages.pacman_cachyos }}
     {{ . | quote }}
