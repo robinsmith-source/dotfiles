@@ -24,6 +24,7 @@ binds {
     Mod+V                               hotkey-overlay-title="Code Editor: VsCode" { spawn "code"; }
     Mod+N                               hotkey-overlay-title="Code Editor: Neovim" { spawn "nvim"; }
     Mod+Z                               hotkey-overlay-title="Code Editor: Zed" { spawn "zed"; }
+    Mod+D                               hotkey-overlay-title="Dictation: Hex toggle" { spawn "hex" "dictation" "toggle"; }
 
     // ─── Media Controls ───
     XF86AudioRaiseVolume                allow-when-locked=true { spawn-sh "noctalia msg volume-up"; }
