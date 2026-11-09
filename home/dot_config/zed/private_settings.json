@@ -49,6 +49,15 @@
       "type": "registry"
     }
   },
+  "languages": {
+    "CSS": {
+      "language_servers": [
+        "tailwindcss-intellisense-css",
+        "!vscode-css-language-server",
+        "..."
+      ]
+    }
+  },
   "base_keymap": "VSCode",
   "minimap": {
     "show": "never"
