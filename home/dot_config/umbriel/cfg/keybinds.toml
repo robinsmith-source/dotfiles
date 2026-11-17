@@ -9,7 +9,7 @@
 
 "Mod+Return" = { action = "spawn alacritty", repeat = false }
 "Mod+B" = { action = "spawn zen-browser", repeat = false }
-"Mod+E" = { action = "spawn nautilus", repeat = false }
+"Mod+E" = { action = "spawn luciole", repeat = false }
 "Mod+P" = { action = "spawn alacritty -e btop", repeat = false }
 "Mod+V" = { action = "spawn code", repeat = false }
 "Mod+N" = { action = "spawn nvim", repeat = false }

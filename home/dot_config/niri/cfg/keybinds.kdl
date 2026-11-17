@@ -19,7 +19,7 @@ binds {
     // ─── Applications ───
     Mod+Return                          hotkey-overlay-title="Open Terminal: Alacritty" { spawn "alacritty"; }
     Mod+B                               hotkey-overlay-title="Open Browser: zen-browser" { spawn "zen-browser"; }
-    Mod+E                               hotkey-overlay-title="File Manager: Nautilus" { spawn "nautilus"; }
+    Mod+E                               hotkey-overlay-title="File Manager: Luciole" { spawn "luciole"; }
     Mod+P                               hotkey-overlay-title="Performance Monitor: BTOP" { spawn "alacritty" "-e" "btop"; }
     Mod+V                               hotkey-overlay-title="Code Editor: VsCode" { spawn "code"; }
     Mod+N                               hotkey-overlay-title="Code Editor: Neovim" { spawn "nvim"; }

@@ -13,6 +13,7 @@ packages:
     # desktop: niri + noctalia
     - niri
     - noctalia
+    - luciole
     - xwayland-satellite
     - xdg-desktop-portal
     - xdg-desktop-portal-gnome
@@ -39,7 +40,6 @@ packages:
     - zed
 
     # GUI apps
-    - nautilus
     - gnome-keyring
 
     # system monitoring
