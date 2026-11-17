@@ -13,7 +13,6 @@ packages:
     # desktop: niri + noctalia
     - niri
     - noctalia
-    - luciole
     - xwayland-satellite
     - xdg-desktop-portal
     - xdg-desktop-portal-gnome
@@ -95,4 +94,5 @@ packages:
     - localsend
 
   aur:
+    - luciole-git
     - cliamp

@@ -57,7 +57,7 @@ To add a package, put it in the right list in `packages.yaml`. Use `pacman`, `pa
 ## Screenshot
 
 The image above lives on the `screenshots` branch. Run `scripts/screenshot.sh` to open a demo
-workspace (nvim, fastfetch, btop) on `DP-1`, capture it and print the file path. Once you are happy
+workspace (nvim, fastfetch, btop, luciole) on `DP-1`, capture it and print the file path. Once you are happy
 with it, `scripts/screenshot.sh --publish` force-pushes that image to the branch.
 
 ## Secrets
