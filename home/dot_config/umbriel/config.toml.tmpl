@@ -12,4 +12,8 @@ files = [
 ]
 
 [include.optional]
+{{- if .laptop }}
 files = ["noctalia.toml"]
+{{- else }}
+files = ["noctalia.toml", "sunshine.toml", "sunshine-mirror.toml"]
+{{- end }}

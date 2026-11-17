@@ -1,2 +1,8 @@
 # managed by fish itself (universal variables)
 .config/fish/fish_variables
+
+{{- if .laptop }}
+# game streaming host is desktop-only
+.config/sunshine
+.config/sunshine/**
+{{- end }}

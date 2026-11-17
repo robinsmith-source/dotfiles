@@ -51,6 +51,16 @@ default_scrolling_extent = 0.5
 {{- if not .laptop }}
 
 [[window_rule]]
+match.app_id = "^steam$"
+match.title = "[Bb]ig [Pp]icture"
+default_output = "sunshine"
+default_fullscreen = true
+
+[[window_rule]]
+match.app_id = "^steam_app_"
+default_output = "sunshine"
+
+[[window_rule]]
 match.app_id = "^[Aa]lacritty$"
 default_output = "DP-1"
 
